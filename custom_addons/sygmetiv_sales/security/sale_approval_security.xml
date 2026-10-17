@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_sale_approver" model="res.groups">
+        <field name="name">Sales Approver</field>
+        <field name="comment">Can approve quotations before they are confirmed as sales orders.</field>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_task_request_list" model="ir.ui.view">
+        <field name="name">syg.task.request.list</field>
+        <field name="model">syg.task.request</field>
+        <field name="arch" type="xml">
+            <list string="Task Requests" decoration-muted="state == 'cancelled'" decoration-success="state == 'converted'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="syg_task_type_id" optional="show"/>
+                <field name="project_id"/>
+                <field name="partner_id" optional="hide"/>
+                <field name="vendor_id" optional="hide"/>
+                <field name="planned_date"/>
+                <field name="deadline"/>
+                <field name="estimated_hours" widget="float_time"/>
+                <field name="time_spent" widget="float_time" optional="show"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'submitted'" decoration-success="state == 'converted'"/>
+                <field name="task_id" widget="many2onebutton"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_task_request_form" model="ir.ui.view">
+        <field name="name">syg.task.request.form</field>
+        <field name="model">syg.task.request</field>
+        <field name="arch" type="xml">
+            <form string="Task Request">
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_create_task" type="object" string="Create Task" class="btn-primary" invisible="state != 'submitted' or not project_id or task_id" groups="sygmetiv_company_management.group_company_manager,project.group_project_user"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state not in ('draft', 'submitted')"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,converted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_task" type="object" class="oe_stat_button" icon="fa-check" invisible="not task_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Project Task</span>
+                                <span class="o_stat_value"><field name="task_link_name" readonly="1" nolabel="1"/></span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="syg_task_type_id" options="{'no_create': True}"/>
+                            <field name="syg_is_meeting" invisible="1"/>
+                            <field name="syg_attendee_ids" widget="many2many_avatar_employee" invisible="not syg_is_meeting" required="syg_is_meeting" options="{'no_create': True}"/>
+                            <field name="syg_role" invisible="not syg_is_meeting" required="syg_is_meeting"/>
+                            <field name="syg_presentation_time" widget="float_time" invisible="not syg_is_meeting" required="syg_is_meeting"/>
+                            <field name="project_id" required="0" options="{'no_create': True}"/>
+                            <field name="can_create_task" invisible="1"/>
+                            <field name="task_id" invisible="1"/>
+                            <field name="estimated_hours" widget="float_time"/>
+                            <field name="time_spent" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="vendor_id" options="{'no_create': True}"/>
+                            <field name="planned_date"/>
+                            <field name="deadline"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Describe the work so a task can be created later"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_syg_task_request_search" model="ir.ui.view">
+        <field name="name">syg.task.request.search</field>
+        <field name="model">syg.task.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="project_id"/>
+                <field name="syg_task_type_id"/>
+                <field name="partner_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Waiting for task" name="waiting" domain="[('state', 'in', ('draft', 'submitted'))]"/>
+                <filter string="Task created" name="converted" domain="[('state', '=', 'converted')]"/>
+                <filter string="My requests" name="mine" domain="[('user_id', '=', uid)]"/>
+                <filter string="Planned" name="planned" date="planned_date"/>
+                <group>
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Project" name="group_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="Task type" name="group_type" context="{'group_by': 'syg_task_type_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Planned date" name="group_planned" context="{'group_by': 'planned_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_syg_task_request" model="ir.actions.act_window">
+        <field name="name">Task Requests</field>
+        <field name="res_model">syg.task.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_waiting': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Capture work before a project task exists</p>
+            <p>Add the details and submit. After submission, if a project is set, use Create Task to turn this into a project task.</p>
+        </field>
+    </record>
+</odoo>

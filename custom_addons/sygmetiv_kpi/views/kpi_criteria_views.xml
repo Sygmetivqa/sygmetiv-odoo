@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_kpi_criteria_list" model="ir.ui.view">
+        <field name="name">syg.kpi.criteria.list</field>
+        <field name="model">syg.kpi.criteria</field>
+        <field name="arch" type="xml">
+            <list string="KPI Criteria" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="max_score"/>
+                <field name="description"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_kpi_criteria_form" model="ir.ui.view">
+        <field name="name">syg.kpi.criteria.form</field>
+        <field name="model">syg.kpi.criteria</field>
+        <field name="arch" type="xml">
+            <form string="KPI Criteria">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="max_score"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_kpi_criteria" model="ir.actions.act_window">
+        <field name="name">KPI Criteria</field>
+        <field name="res_model">syg.kpi.criteria</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_syg_kpi_status_list" model="ir.ui.view">
+        <field name="name">syg.kpi.status.list</field>
+        <field name="model">syg.kpi.status</field>
+        <field name="arch" type="xml">
+            <list string="Score Bands" editable="bottom">
+                <field name="name"/>
+                <field name="from_score"/>
+                <field name="to_score"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_syg_kpi_status" model="ir.actions.act_window">
+        <field name="name">Score Bands</field>
+        <field name="res_model">syg.kpi.status</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

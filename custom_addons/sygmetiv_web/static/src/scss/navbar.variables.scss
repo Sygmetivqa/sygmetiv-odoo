@@ -1,0 +1,26 @@
+// Enterprise navbar: white bar, dark text. Loaded before Community navbar
+// variables so their `!default` values do not replace these.
+
+$o-navbar-background: $o-white;
+$o-navbar-padding-v: 10px;
+$o-navbar-border-bottom: 0;
+$o-navbar-font-size: $o-font-size-base;
+
+$o-navbar-entry-margin-h: 1px;
+$o-navbar-entry-border-radius: $o-border-radius;
+$o-navbar-entry-color: $o-main-text-color;
+$o-navbar-entry-padding-h: 0.63em;
+
+$o-navbar-entry-bg--hover: $o-gray-200;
+$o-navbar-entry-color--hover: $o-black;
+
+$o-navbar-entry-bg--active: unset;
+$o-navbar-entry-color--active: unset;
+
+$o-navbar-brand-color: $o-main-text-color;
+
+$o-navbar-badge-size: 0.7em;
+$o-navbar-badge-padding: 6px;
+$o-navbar-badge-bg: $o-danger;
+$o-navbar-badge-color: $o-white;
+$o-navbar-badge-text-shadow: none;

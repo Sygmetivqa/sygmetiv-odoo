@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_kpi_user" model="res.groups">
+        <field name="name">KPI User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">See evaluations where you are the employee or an evaluator, and enter your scores.</field>
+    </record>
+
+    <record id="group_kpi_manager" model="res.groups">
+        <field name="name">KPI Manager</field>
+        <field name="implied_ids" eval="[(4, ref('group_kpi_user'))]"/>
+        <field name="comment">Configure criteria and score bands, and submit employee evaluations.</field>
+    </record>
+
+    <record id="sygmetiv_company_management.group_company_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_kpi_user'))]"/>
+    </record>
+    <record id="sygmetiv_company_management.group_company_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_kpi_manager'))]"/>
+    </record>
+
+    <record id="rule_kpi_evaluation_user" model="ir.rule">
+        <field name="name">KPI evaluation: own or assigned</field>
+        <field name="model_id" ref="model_syg_kpi_evaluation"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_kpi_user'))]"/>
+    </record>
+    <record id="rule_kpi_evaluation_manager" model="ir.rule">
+        <field name="name">KPI evaluation: manager</field>
+        <field name="model_id" ref="model_syg_kpi_evaluation"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_kpi_manager'))]"/>
+    </record>
+    <record id="rule_kpi_score_user" model="ir.rule">
+        <field name="name">KPI score: own lines</field>
+        <field name="model_id" ref="model_syg_kpi_score_line"/>
+        <field name="domain_force">[('evaluation_id.employee_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_kpi_user'))]"/>
+    </record>
+    <record id="rule_kpi_score_manager" model="ir.rule">
+        <field name="name">KPI score: manager</field>
+        <field name="model_id" ref="model_syg_kpi_score_line"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_kpi_manager'))]"/>
+    </record>
+</odoo>

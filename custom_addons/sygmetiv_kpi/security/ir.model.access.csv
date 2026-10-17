@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_syg_evaluation_dashboard_user,syg.evaluation.dashboard.user,model_syg_evaluation_dashboard,sygmetiv_kpi.group_kpi_user,1,1,1,1
+access_syg_kpi_criteria_user,syg.kpi.criteria.user,model_syg_kpi_criteria,sygmetiv_kpi.group_kpi_user,1,0,0,0
+access_syg_kpi_criteria_manager,syg.kpi.criteria.manager,model_syg_kpi_criteria,sygmetiv_kpi.group_kpi_manager,1,1,1,1
+access_syg_kpi_status_user,syg.kpi.status.user,model_syg_kpi_status,sygmetiv_kpi.group_kpi_user,1,0,0,0
+access_syg_kpi_status_manager,syg.kpi.status.manager,model_syg_kpi_status,sygmetiv_kpi.group_kpi_manager,1,1,1,1
+access_syg_kpi_evaluation_user,syg.kpi.evaluation.user,model_syg_kpi_evaluation,sygmetiv_kpi.group_kpi_user,1,1,0,0
+access_syg_kpi_evaluation_manager,syg.kpi.evaluation.manager,model_syg_kpi_evaluation,sygmetiv_kpi.group_kpi_manager,1,1,1,1
+access_syg_kpi_line_user,syg.kpi.evaluation.line.user,model_syg_kpi_evaluation_line,sygmetiv_kpi.group_kpi_user,1,0,0,0
+access_syg_kpi_line_manager,syg.kpi.evaluation.line.manager,model_syg_kpi_evaluation_line,sygmetiv_kpi.group_kpi_manager,1,1,1,1
+access_syg_kpi_score_user,syg.kpi.score.line.user,model_syg_kpi_score_line,sygmetiv_kpi.group_kpi_user,1,1,0,0
+access_syg_kpi_score_manager,syg.kpi.score.line.manager,model_syg_kpi_score_line,sygmetiv_kpi.group_kpi_manager,1,1,1,1
+access_syg_kpi_config_manager,syg.kpi.evaluation.config.manager,model_syg_kpi_evaluation_config,sygmetiv_kpi.group_kpi_manager,1,1,1,1
+access_syg_kpi_config_line_manager,syg.kpi.evaluation.config.line.manager,model_syg_kpi_evaluation_config_line,sygmetiv_kpi.group_kpi_manager,1,1,1,1
+access_syg_kpi_access_manager,syg.kpi.evaluator.access.manager,model_syg_kpi_evaluator_access,sygmetiv_kpi.group_kpi_manager,1,1,1,1

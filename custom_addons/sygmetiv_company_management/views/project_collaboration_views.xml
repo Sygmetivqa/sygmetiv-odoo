@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_project_document_list" model="ir.ui.view">
+        <field name="name">syg.project.document.list</field>
+        <field name="model">syg.project.document</field>
+        <field name="arch" type="xml">
+            <list string="Project Documents">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="project_id"/>
+                <field name="datas_fname"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_project_document_form" model="ir.ui.view">
+        <field name="name">syg.project.document.form</field>
+        <field name="model">syg.project.document</field>
+        <field name="arch" type="xml">
+            <form string="Project Document">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="document_type"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="user_id" options="{'no_create': True}"/>
+                            <field name="datas" filename="datas_fname"/>
+                            <field name="datas_fname" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Short description of this file"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_syg_project_document_search" model="ir.ui.view">
+        <field name="name">syg.project.document.search</field>
+        <field name="model">syg.project.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <filter string="Contract" name="type_contract" domain="[('document_type', '=', 'contract')]"/>
+                <filter string="Scope of Work" name="type_sow" domain="[('document_type', '=', 'sow')]"/>
+                <filter string="Design" name="type_design" domain="[('document_type', '=', 'design')]"/>
+                <filter string="Meeting" name="type_meeting" domain="[('document_type', '=', 'meeting')]"/>
+                <group>
+                    <filter string="Type" name="group_type" context="{'group_by': 'document_type'}"/>
+                    <filter string="Project" name="group_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_syg_project_document" model="ir.actions.act_window">
+        <field name="name">Project Documents</field>
+        <field name="res_model">syg.project.document</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_syg_project_note_list" model="ir.ui.view">
+        <field name="name">syg.project.note.list</field>
+        <field name="model">syg.project.note</field>
+        <field name="arch" type="xml">
+            <list string="Project Notes">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="note_type"/>
+                <field name="project_id"/>
+                <field name="employee_id"/>
+                <field name="attendees"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_project_note_form" model="ir.ui.view">
+        <field name="name">syg.project.note.form</field>
+        <field name="model">syg.project.note</field>
+        <field name="arch" type="xml">
+            <form string="Project Note">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="note_type"/>
+                            <field name="attendees"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="user_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <field name="body" placeholder="Meeting minutes, call notes or follow-up details"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_syg_project_note_search" model="ir.ui.view">
+        <field name="name">syg.project.note.search</field>
+        <field name="model">syg.project.note</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="employee_id"/>
+                <filter string="Meeting Minutes" name="type_meeting" domain="[('note_type', '=', 'meeting')]"/>
+                <filter string="Call Notes" name="type_call" domain="[('note_type', '=', 'call')]"/>
+                <filter string="Follow-up" name="type_followup" domain="[('note_type', '=', 'followup')]"/>
+                <filter string="Date" name="filter_date" date="date"/>
+                <group>
+                    <filter string="Type" name="group_type" context="{'group_by': 'note_type'}"/>
+                    <filter string="Project" name="group_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_syg_project_note" model="ir.actions.act_window">
+        <field name="name">Project Notes</field>
+        <field name="res_model">syg.project.note</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

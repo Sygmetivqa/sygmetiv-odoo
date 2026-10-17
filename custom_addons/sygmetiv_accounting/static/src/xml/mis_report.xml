@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sygmetiv_accounting.SygMisBoardField">
+        <div class="o_syg_mis_board">
+            <div class="o_syg_mis_board_title">
+                <div>
+                    <div class="o_syg_mis_kicker">Accounting report</div>
+                    <h2 t-esc="data.title"/>
+                    <div class="o_syg_mis_period" t-esc="data.period"/>
+                </div>
+                <button class="btn btn-link" t-on-click="toggleUnfold" type="button">
+                    <t t-if="state.unfoldAll">Fold</t>
+                    <t t-else="">Unfold</t>
+                </button>
+            </div>
+            <div class="o_syg_mis_table_wrap">
+                <table class="o_syg_mis_table">
+                    <thead>
+                        <tr>
+                            <th class="o_syg_mis_name">Account</th>
+                            <th t-if="data.compare" class="o_syg_mis_num">
+                                <div>Previous Period</div>
+                                <div class="o_syg_mis_sub" t-esc="data.previous_label"/>
+                            </th>
+                            <th t-if="data.trial" class="o_syg_mis_num">Debit</th>
+                            <th t-if="data.trial" class="o_syg_mis_num">Credit</th>
+                            <t t-if="data.aged">
+                                <th class="o_syg_mis_num">Not Due</th>
+                                <th class="o_syg_mis_num">1-30</th>
+                                <th class="o_syg_mis_num">31-60</th>
+                                <th class="o_syg_mis_num">61-90</th>
+                                <th class="o_syg_mis_num">Older</th>
+                            </t>
+                            <th class="o_syg_mis_num">
+                                <div>Current Period</div>
+                                <div class="o_syg_mis_sub" t-esc="data.period"/>
+                            </th>
+                            <th t-if="data.compare" class="o_syg_mis_num">% of Period</th>
+                            <th t-if="data.compare" class="o_syg_mis_num">Variance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="visibleLines()" t-as="line" t-key="line.index">
+                            <tr t-att-class="'o_syg_mis_' + line.type + (line.account_id or line.partner_id ? ' o_syg_mis_click' : '')"
+                                t-on-click="() => this.openLine(line)">
+                                <td class="o_syg_mis_name" t-att-style="'padding-left:' + (16 + (line.level || 0) * 18) + 'px'">
+                                    <button t-if="line.type === 'section'" class="o_syg_mis_caret btn btn-link"
+                                            t-on-click="(ev) => this.toggleFold(line.index, ev)" type="button">
+                                        <i t-att-class="isFolded(line.index) ? 'fa fa-caret-right' : 'fa fa-caret-down'"/>
+                                    </button>
+                                    <span t-if="line.code" class="o_syg_mis_code" t-esc="line.code"/>
+                                    <span t-esc="line.name"/>
+                                </td>
+                                <td t-if="data.compare" class="o_syg_mis_num" t-att-class="isNegative(line.previous) ? 'text-danger' : ''">
+                                    <t t-esc="formatAmount(line.previous)"/>
+                                </td>
+                                <td t-if="data.trial" class="o_syg_mis_num" t-esc="formatAmount(line.debit)"/>
+                                <td t-if="data.trial" class="o_syg_mis_num" t-esc="formatAmount(line.credit)"/>
+                                <t t-if="data.aged">
+                                    <td class="o_syg_mis_num" t-esc="formatAmount(line.not_due)"/>
+                                    <td class="o_syg_mis_num" t-esc="formatAmount(line.days_30)"/>
+                                    <td class="o_syg_mis_num" t-esc="formatAmount(line.days_60)"/>
+                                    <td class="o_syg_mis_num" t-esc="formatAmount(line.days_90)"/>
+                                    <td class="o_syg_mis_num" t-esc="formatAmount(line.days_older)"/>
+                                </t>
+                                <td class="o_syg_mis_num" t-att-class="isNegative(line.balance) ? 'text-danger' : ''">
+                                    <t t-esc="formatAmount(line.balance)"/>
+                                </td>
+                                <td t-if="data.compare" class="o_syg_mis_num o_syg_mis_muted" t-esc="formatPercent(line.percent)"/>
+                                <td t-if="data.compare" class="o_syg_mis_num" t-att-class="isNegative(line.variance) ? 'text-danger' : ''">
+                                    <t t-esc="formatAmount(line.variance)"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </t>
+</templates>

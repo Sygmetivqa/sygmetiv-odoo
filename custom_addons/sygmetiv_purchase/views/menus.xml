@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_syg_purchase_root"
+        name="Purchase"
+        parent="sygmetiv_company_management.menu_syg_company_root"
+        sequence="24"
+        groups="purchase.group_purchase_user"/>
+
+    <menuitem
+        id="menu_syg_purchase_rfq"
+        name="Requests for Quotation"
+        parent="menu_syg_purchase_root"
+        action="purchase.purchase_rfq"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_purchase_orders"
+        name="Purchase Orders"
+        parent="menu_syg_purchase_root"
+        action="purchase.purchase_form_action"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_purchase_analysis"
+        name="Purchase Analysis"
+        parent="menu_syg_purchase_root"
+        action="purchase.action_purchase_order_report_all"
+        sequence="30"/>
+</odoo>

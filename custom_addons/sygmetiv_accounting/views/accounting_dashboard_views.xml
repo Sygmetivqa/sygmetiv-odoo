@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_accounting_dashboard_form" model="ir.ui.view">
+        <field name="name">syg.accounting.dashboard.form</field>
+        <field name="model">syg.accounting.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Accounting Dashboard" create="0" delete="0" class="o_syg_dashboard o_syg_dashboard_accounting">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <div class="o_syg_dash_hero">
+                        <div class="o_syg_dash_hero_copy">
+                            <div class="o_syg_dash_kicker">Sygmetiv · Accounting</div>
+                            <h1>Accounting dashboard</h1>
+                            <div class="o_syg_dash_subtitle">Income, expense, invoices and outstanding balances</div>
+                        </div>
+                        <div class="o_syg_dash_hero_actions">
+                            <div class="o_syg_period_pill">
+                                <i class="fa fa-calendar"/>
+                                <field name="period_start" widget="daterange" options="{'end_date_field': 'period_end'}" nolabel="1"/>
+                                <field name="period_end" invisible="1"/>
+                            </div>
+                            <button name="action_refresh" type="object" string="Refresh" class="btn btn-light o_syg_btn_ghost"/>
+                        </div>
+                    </div>
+                    <div class="o_syg_section_title">Period snapshot</div>
+                    <div class="o_syg_kpi_grid">
+                        <div class="o_syg_kpi_card o_syg_accent_green o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-arrow-up"/></span><span class="o_syg_kpi_label">Income</span></div>
+                            <div class="o_syg_kpi_value o_syg_kpi_money"><field name="d_income" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_rose o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-arrow-down"/></span><span class="o_syg_kpi_label">Expense</span></div>
+                            <div class="o_syg_kpi_value o_syg_kpi_money"><field name="d_expense" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_violet o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-balance-scale"/></span><span class="o_syg_kpi_label">Profit</span></div>
+                            <div class="o_syg_kpi_value o_syg_kpi_money"><field name="d_profit" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <button name="action_open_invoices" type="object" class="o_syg_kpi_card o_syg_accent_sky">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-file-text-o"/></span><span class="o_syg_kpi_label">Customer invoices</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_invoices" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <button name="action_open_bills" type="object" class="o_syg_kpi_card o_syg_accent_amber">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-truck"/></span><span class="o_syg_kpi_label">Vendor bills</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_bills" nolabel="1" readonly="1"/></div>
+                        </button>
+                    </div>
+                    <div class="o_syg_section_title">Outstanding</div>
+                    <div class="o_syg_kpi_grid">
+                        <button name="action_open_receivable" type="object" class="o_syg_kpi_card o_syg_accent_teal">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-users"/></span><span class="o_syg_kpi_label">Receivable residual</span></div>
+                            <div class="o_syg_kpi_value o_syg_kpi_money"><field name="d_receivable" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <button name="action_open_payable" type="object" class="o_syg_kpi_card o_syg_accent_rose">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-handshake-o"/></span><span class="o_syg_kpi_label">Payable residual</span></div>
+                            <div class="o_syg_kpi_value o_syg_kpi_money"><field name="d_payable" nolabel="1" readonly="1"/></div>
+                        </button>
+                    </div>
+                    <div class="o_syg_section_title">MIS reports</div>
+                    <div class="o_syg_kpi_grid">
+                        <button name="action_open_mis" type="object" class="o_syg_kpi_card o_syg_accent_violet">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-dashboard"/></span><span class="o_syg_kpi_label">Executive MIS</span></div>
+                            <div class="o_syg_kpi_value">Open</div>
+                        </button>
+                        <button name="action_open_mis_pnl" type="object" class="o_syg_kpi_card o_syg_accent_green">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-line-chart"/></span><span class="o_syg_kpi_label">Profit and Loss</span></div>
+                            <div class="o_syg_kpi_value">Open</div>
+                        </button>
+                        <button name="action_open_mis_balance_sheet" type="object" class="o_syg_kpi_card o_syg_accent_sky">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-bank"/></span><span class="o_syg_kpi_label">Balance Sheet</span></div>
+                            <div class="o_syg_kpi_value">Open</div>
+                        </button>
+                    </div>
+                    <div class="o_syg_section_title">Graphs</div>
+                    <div class="o_syg_chart_grid">
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Income vs expense</div>
+                            <field name="graph_pnl" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_accounting_dashboard" model="ir.actions.server">
+        <field name="name">Accounting Dashboard</field>
+        <field name="model_id" ref="model_syg_accounting_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open()</field>
+    </record>
+
+    <record id="view_syg_account_line_pivot" model="ir.ui.view">
+        <field name="name">syg.account.move.line.pivot</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Account lines" sample="1">
+                <field name="account_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="balance" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_syg_general_ledger" model="ir.actions.act_window">
+        <field name="name">General Ledger</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="domain">[('parent_state', '=', 'posted'), ('display_type', 'not in', ('line_section', 'line_note'))]</field>
+        <field name="context">{'search_default_posted': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No posted journal items yet</p>
+        </field>
+    </record>
+
+    <record id="action_syg_profit_loss" model="ir.actions.act_window">
+        <field name="name">Profit and Loss</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('parent_state', '=', 'posted'), ('account_id.internal_group', 'in', ('income', 'expense'))]</field>
+        <field name="context">{'search_default_posted': 1}</field>
+    </record>
+
+    <record id="action_syg_balance_sheet" model="ir.actions.act_window">
+        <field name="name">Balance Sheet</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('parent_state', '=', 'posted'), ('account_id.internal_group', 'in', ('asset', 'liability', 'equity'))]</field>
+    </record>
+
+    <record id="action_syg_aged_receivable" model="ir.actions.act_window">
+        <field name="name">Aged Receivable</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="domain">[('parent_state', '=', 'posted'), ('account_id.account_type', '=', 'asset_receivable'), ('amount_residual', '!=', 0)]</field>
+        <field name="context">{'search_default_partner': 1}</field>
+    </record>
+
+    <record id="action_syg_aged_payable" model="ir.actions.act_window">
+        <field name="name">Aged Payable</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="domain">[('parent_state', '=', 'posted'), ('account_id.account_type', '=', 'liability_payable'), ('amount_residual', '!=', 0)]</field>
+        <field name="context">{'search_default_partner': 1}</field>
+    </record>
+</odoo>

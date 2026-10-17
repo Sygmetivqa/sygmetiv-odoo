@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_project_dashboard_form" model="ir.ui.view">
+        <field name="name">syg.project.dashboard.form</field>
+        <field name="model">syg.project.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Project Dashboard" create="0" delete="0" class="o_syg_dashboard o_syg_dashboard_project">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="project_id" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <div class="o_syg_dash_hero">
+                        <div class="o_syg_dash_hero_copy">
+                            <div class="o_syg_dash_kicker">Sygmetiv · Projects</div>
+                            <h1>Company project dashboard</h1>
+                            <div class="o_syg_dash_subtitle">
+                                <field name="project_status" nolabel="1" readonly="1"/>
+                                · Status, tasks and timesheets for this company
+                            </div>
+                        </div>
+                        <div class="o_syg_dash_hero_actions">
+                            <div class="o_syg_period_pill">
+                                <i class="fa fa-calendar"/>
+                                <field name="period_start" widget="daterange" options="{'end_date_field': 'period_end'}" nolabel="1"/>
+                                <field name="period_end" invisible="1"/>
+                            </div>
+                            <button name="action_refresh" type="object" string="Refresh" class="btn btn-light o_syg_btn_ghost"/>
+                        </div>
+                    </div>
+                    <div class="o_syg_section_title">Company snapshot</div>
+                    <div class="o_syg_kpi_grid">
+                        <button name="action_open_projects" type="object" class="o_syg_kpi_card o_syg_accent_violet">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-folder-open"/></span><span class="o_syg_kpi_label">Projects</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_projects" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <div class="o_syg_kpi_card o_syg_accent_amber o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-certificate"/></span><span class="o_syg_kpi_label">AMC</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_amc" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_rose o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-exclamation-triangle"/></span><span class="o_syg_kpi_label">At risk</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_at_risk" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <button name="action_open_tasks" type="object" class="o_syg_kpi_card o_syg_accent_sky">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-check-square-o"/></span><span class="o_syg_kpi_label">Open tasks</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_open_tasks" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <div class="o_syg_kpi_card o_syg_accent_green o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-check"/></span><span class="o_syg_kpi_label">Closed tasks</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_closed_tasks" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <button name="action_open_timesheets" type="object" class="o_syg_kpi_card o_syg_accent_teal">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-clock-o"/></span><span class="o_syg_kpi_label">Timesheet hours</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_timesheet" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <div class="o_syg_kpi_card o_syg_accent_violet o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-hourglass-half"/></span><span class="o_syg_kpi_label">Estimated hours</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_allocated" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_rose o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-balance-scale"/></span><span class="o_syg_kpi_label">Hours vs estimate</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_hours_status" nolabel="1" readonly="1"/></div>
+                        </div>
+                    </div>
+                    <div class="o_syg_section_title">Graphs</div>
+                    <div class="o_syg_chart_grid">
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Project status</div>
+                            <field name="graph_status" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Tasks by stage</div>
+                            <field name="graph_tasks" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Timesheet hours</div>
+                            <field name="graph_hours" widget="syg_dashboard_graph" options="{'graph_type': 'line'}" nolabel="1"/>
+                        </div>
+                    </div>
+                    <div class="o_syg_chart_grid">
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">AMC vs standard</div>
+                            <field name="graph_amc" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_syg_project_detail_dashboard_form" model="ir.ui.view">
+        <field name="name">syg.project.dashboard.detail.form</field>
+        <field name="model">syg.project.dashboard</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <form string="Project Dashboard" create="0" delete="0" class="o_syg_dashboard o_syg_dashboard_project">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="project_id" invisible="1"/>
+                    <div class="o_syg_dash_hero">
+                        <div class="o_syg_dash_hero_copy">
+                            <div class="o_syg_dash_kicker">Project detail</div>
+                            <h1><field name="name" nolabel="1" readonly="1"/></h1>
+                            <div class="o_syg_dash_subtitle">
+                                Status: <field name="project_status" nolabel="1" readonly="1"/>
+                            </div>
+                        </div>
+                        <div class="o_syg_dash_hero_actions">
+                            <div class="o_syg_period_pill">
+                                <i class="fa fa-calendar"/>
+                                <field name="period_start" widget="daterange" options="{'end_date_field': 'period_end'}" nolabel="1"/>
+                                <field name="period_end" invisible="1"/>
+                            </div>
+                            <button name="action_refresh" type="object" string="Refresh" class="btn btn-light o_syg_btn_ghost"/>
+                        </div>
+                    </div>
+                    <div class="o_syg_kpi_grid">
+                        <button name="action_open_tasks" type="object" class="o_syg_kpi_card o_syg_accent_violet">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-list"/></span><span class="o_syg_kpi_label">Tasks</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_tasks" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <div class="o_syg_kpi_card o_syg_accent_sky o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-spinner"/></span><span class="o_syg_kpi_label">Open</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_open_tasks" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_green o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-check"/></span><span class="o_syg_kpi_label">Closed</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_closed_tasks" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <button name="action_open_timesheets" type="object" class="o_syg_kpi_card o_syg_accent_teal">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-clock-o"/></span><span class="o_syg_kpi_label">Hours</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_timesheet" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <div class="o_syg_kpi_card o_syg_accent_amber o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-users"/></span><span class="o_syg_kpi_label">Assignees</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_assignees" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_violet o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-hourglass-half"/></span><span class="o_syg_kpi_label">Estimated hours</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_allocated" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_teal o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-clock-o"/></span><span class="o_syg_kpi_label">Hours spent</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_spent" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_rose o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-balance-scale"/></span><span class="o_syg_kpi_label">Hours vs estimate</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_hours_status" nolabel="1" readonly="1"/></div>
+                        </div>
+                    </div>
+                    <div class="o_syg_chart_grid">
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Tasks by stage</div>
+                            <field name="graph_tasks" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Timesheet hours</div>
+                            <field name="graph_hours" widget="syg_dashboard_graph" options="{'graph_type': 'line'}" nolabel="1"/>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_project_dashboard" model="ir.actions.server">
+        <field name="name">Project Dashboard</field>
+        <field name="model_id" ref="model_syg_project_dashboard"/>
+        <field name="state">code</field>
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+        <field name="code">action = model.action_open_company()</field>
+    </record>
+</odoo>

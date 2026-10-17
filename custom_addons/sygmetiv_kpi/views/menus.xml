@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_perf_app_evaluation_dashboard"
+        name="Evaluation Dashboard"
+        parent="sygmetiv_company_management.menu_syg_performance_app"
+        action="action_syg_evaluation_dashboard"
+        sequence="2"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <menuitem
+        id="menu_syg_evaluation_dashboard"
+        name="Evaluation Dashboard"
+        parent="sygmetiv_company_management.menu_syg_performance"
+        action="action_syg_evaluation_dashboard"
+        sequence="2"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <menuitem
+        id="menu_perf_app_kpi"
+        name="KPI Evaluations"
+        parent="sygmetiv_company_management.menu_syg_performance_app"
+        action="action_syg_kpi_evaluation"
+        sequence="30"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <menuitem
+        id="menu_perf_app_config"
+        name="Configuration"
+        parent="sygmetiv_company_management.menu_syg_performance_app"
+        sequence="90"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <menuitem
+        id="menu_perf_app_kpi_config"
+        name="KPI Evaluations"
+        parent="menu_perf_app_config"
+        action="action_syg_kpi_evaluation_config"
+        sequence="5"/>
+
+    <menuitem
+        id="menu_perf_app_criteria"
+        name="KPI Criteria"
+        parent="menu_perf_app_config"
+        action="action_syg_kpi_criteria"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_perf_app_status"
+        name="Score Bands"
+        parent="menu_perf_app_config"
+        action="action_syg_kpi_status"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_kpi_evaluation"
+        name="KPI Evaluations"
+        parent="sygmetiv_company_management.menu_syg_performance"
+        action="action_syg_kpi_evaluation"
+        sequence="30"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <menuitem
+        id="menu_syg_my_evaluation"
+        name="My Evaluation"
+        parent="sygmetiv_company_management.menu_syg_performance"
+        action="action_syg_kpi_evaluation_mine"
+        sequence="16"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_kpi_evaluation_config"
+        name="KPI Evaluations"
+        parent="sygmetiv_company_management.menu_syg_config"
+        action="action_syg_kpi_evaluation_config"
+        sequence="25"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <menuitem
+        id="menu_syg_kpi_criteria"
+        name="KPI Criteria"
+        parent="sygmetiv_company_management.menu_syg_config"
+        action="action_syg_kpi_criteria"
+        sequence="30"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <menuitem
+        id="menu_syg_kpi_status"
+        name="Score Bands"
+        parent="sygmetiv_company_management.menu_syg_config"
+        action="action_syg_kpi_status"
+        sequence="40"
+        groups="sygmetiv_kpi.group_kpi_manager"/>
+
+    <record id="menu_syg_kpi_evaluation" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_kpi_manager')])]"/>
+    </record>
+    <record id="menu_syg_evaluation_dashboard" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_kpi_manager')])]"/>
+    </record>
+    <record id="menu_perf_app_evaluation_dashboard" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_kpi_manager')])]"/>
+    </record>
+    <record id="menu_perf_app_kpi" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_kpi_manager')])]"/>
+    </record>
+</odoo>

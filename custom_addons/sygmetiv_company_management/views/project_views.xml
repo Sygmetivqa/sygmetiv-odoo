@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_form_syg_amc" model="ir.ui.view">
+        <field name="name">project.project.form.syg.amc</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_open_syg_project_dashboard" type="object" string="Dashboard" class="btn-secondary"/>
+                <button name="action_open_go_live" type="object" string="Go Live" class="btn-primary" invisible="syg_is_live or is_template"/>
+                <button name="action_email_customer" type="object" string="Email Customer" invisible="is_template"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_syg_documents" type="object" class="oe_stat_button" icon="fa-paperclip">
+                    <field name="syg_document_count" widget="statinfo" string="Documents"/>
+                </button>
+                <button name="action_open_syg_notes" type="object" class="oe_stat_button" icon="fa-comments">
+                    <field name="syg_note_count" widget="statinfo" string="Notes"/>
+                </button>
+                <button name="action_open_syg_credentials" type="object" class="oe_stat_button" icon="fa-key">
+                    <field name="syg_credential_count" widget="statinfo" string="Credentials"/>
+                </button>
+            </xpath>
+            <xpath expr="//widget[@name='web_ribbon'][last()]" position="after">
+                <widget name="web_ribbon" title="Live" bg_color="text-bg-success" invisible="not syg_is_live or not active"/>
+                <widget name="web_ribbon" title="AMC" bg_color="text-bg-warning" invisible="not syg_is_amc or not active"/>
+                <widget name="web_ribbon" title="Over Hours" bg_color="text-bg-danger" invisible="not is_project_overtime"/>
+            </xpath>
+            <xpath expr="//page[@name='description']" position="after">
+                <page string="Documents" name="syg_documents">
+                    <field name="syg_document_ids" context="{'default_project_id': id}">
+                        <list editable="bottom">
+                            <field name="date"/>
+                            <field name="name"/>
+                            <field name="document_type"/>
+                            <field name="datas" filename="datas_fname"/>
+                            <field name="datas_fname" column_invisible="1"/>
+                            <field name="user_id" options="{'no_create': True}"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Notes" name="syg_notes">
+                    <field name="syg_note_ids" context="{'default_project_id': id}">
+                        <list>
+                            <field name="date"/>
+                            <field name="note_type"/>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                            <field name="attendees"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Go-Live Checklist" name="syg_live_checklist">
+                    <group>
+                        <field name="syg_is_live" readonly="1"/>
+                        <field name="syg_go_live_date" readonly="1"/>
+                    </group>
+                    <field name="syg_live_check_ids" readonly="1">
+                        <list>
+                            <field name="sequence" column_invisible="1"/>
+                            <field name="name"/>
+                            <field name="mandatory"/>
+                            <field name="done"/>
+                            <field name="user_id"/>
+                            <field name="done_date"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="Hours" name="syg_hours">
+                    <group>
+                        <group string="Man hours">
+                            <field name="allow_timesheets" invisible="1"/>
+                            <field name="allocated_hours" widget="float_time" string="Estimated hours"/>
+                            <field name="effective_hours" widget="float_time" string="Hours spent" readonly="1"/>
+                            <field name="remaining_hours" widget="float_time" string="Hours remaining" readonly="1"/>
+                            <field name="is_project_overtime" invisible="1"/>
+                            <field name="syg_hours_status" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//group[@name='extra_settings']" position="inside">
+                <field name="syg_is_amc"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_project_kanban_syg_amc" model="ir.ui.view">
+        <field name="name">project.project.kanban.syg.amc</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_template']" position="after">
+                <field name="syg_is_amc"/>
+            </xpath>
+            <xpath expr="//t[@t-name='card']" position="inside">
+                <div t-if="record.syg_is_amc.raw_value" class="ribbon ribbon-top-right o_syg_amc_ribbon">
+                    <span class="text-bg-warning">AMC</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_project_list_syg_amc" model="ir.ui.view">
+        <field name="name">project.project.list.syg.amc</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="syg_is_amc" optional="show" widget="boolean_toggle"/>
+                <field name="allocated_hours" optional="show" widget="float_time" string="Estimated"/>
+                <field name="effective_hours" optional="show" widget="float_time" string="Spent"/>
+                <field name="syg_hours_status" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_project_search_syg_amc" model="ir.ui.view">
+        <field name="name">project.project.search.syg.amc</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_project_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_projects']" position="after">
+                <filter string="AMC Projects" name="syg_amc_projects" domain="[('syg_is_amc', '=', True)]"/>
+                <filter string="Over hours" name="syg_over_hours" domain="[('is_project_overtime', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

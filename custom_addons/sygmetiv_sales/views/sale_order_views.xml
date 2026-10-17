@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_sale_approval" model="ir.ui.view">
+        <field name="name">sale.order.form.sale.approval</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@id='action_confirm']" position="attributes">
+                <attribute name="invisible">state != 'sent' or not is_sale_approver</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_confirm'][not(@id)]" position="attributes">
+                <attribute name="invisible">state != 'draft' or not is_sale_approver</attribute>
+            </xpath>
+            <xpath expr="//header/button[@id='action_confirm']" position="after">
+                <button
+                    string="Submit for Approval"
+                    name="action_request_approval"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state not in ('draft', 'sent') or is_sale_approver"/>
+                <button
+                    string="Approve"
+                    name="action_approve"
+                    type="object"
+                    class="btn-primary"
+                    groups="sygmetiv_sales.group_sale_approver"
+                    invisible="state != 'waiting_approval'"/>
+                <button
+                    string="Reject"
+                    name="action_reject_approval"
+                    type="object"
+                    groups="sygmetiv_sales.group_sale_approver"
+                    invisible="state != 'waiting_approval'"/>
+                    confirm="Reject this quotation and set it back to Quotation?"/>
+            </xpath>
+            <xpath expr="//header/button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">state not in ['draft', 'sent', 'waiting_approval', 'sale'] or not id or locked</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_draft']" position="attributes">
+                <attribute name="invisible">state not in ('cancel', 'waiting_approval')</attribute>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,waiting_approval,sale</attribute>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="after">
+                <field name="is_sale_approver" invisible="1"/>
+            </xpath>
+            <xpath expr="//header" position="after">
+                <div class="alert alert-info" role="alert" invisible="state != 'waiting_approval'">
+                    This quotation is waiting for a Sales Approver.
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='user_id'][@widget='many2one_avatar_user']" position="after">
+                <field name="approval_requested_by" invisible="not approval_requested_by and state != 'waiting_approval'"/>
+                <field name="approval_requested_date" invisible="not approval_requested_date and state != 'waiting_approval'"/>
+                <field name="approved_by" invisible="not approved_by"/>
+                <field name="approved_date" invisible="not approved_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter_approval" model="ir.ui.view">
+        <field name="name">sale.order.list.select.approval</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                <filter
+                    string="Waiting Approval"
+                    name="waiting_approval"
+                    domain="[('state', '=', 'waiting_approval')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_sale_order_to_approve" model="ir.actions.act_window">
+        <field name="name">Orders to Approve</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,kanban,form,graph,pivot</field>
+        <field name="domain">[('state', '=', 'waiting_approval')]</field>
+        <field name="context">{'search_default_waiting_approval': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No quotations waiting for approval
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_sale_order_to_approve"
+        name="Orders to Approve"
+        parent="sale.sale_order_menu"
+        action="action_sale_order_to_approve"
+        groups="sygmetiv_sales.group_sale_approver"
+        sequence="15"/>
+</odoo>

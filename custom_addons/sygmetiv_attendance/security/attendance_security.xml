@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_syg_attendance_geofence_company" model="ir.rule">
+        <field name="name">Attendance location: multi-company</field>
+        <field name="model_id" ref="model_syg_attendance_geofence"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+</odoo>

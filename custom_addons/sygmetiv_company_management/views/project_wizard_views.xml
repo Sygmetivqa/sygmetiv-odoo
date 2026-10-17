@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_project_go_live_wizard" model="ir.ui.view">
+        <field name="name">syg.project.go.live.wizard.form</field>
+        <field name="model">syg.project.go.live.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Go Live">
+                <group>
+                    <field name="project_id" readonly="1"/>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom" create="0" delete="0">
+                        <field name="sequence" column_invisible="1"/>
+                        <field name="name" readonly="1"/>
+                        <field name="mandatory" readonly="1"/>
+                        <field name="done"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_confirm" type="object" string="Go Live" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_syg_project_email_wizard" model="ir.ui.view">
+        <field name="name">syg.project.email.wizard.form</field>
+        <field name="model">syg.project.email.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Email Customer">
+                <group>
+                    <field name="project_id" invisible="1"/>
+                    <field name="partner_id" options="{'no_create': True}"/>
+                    <field name="subject"/>
+                </group>
+                <field name="body" widget="html" placeholder="Write the message to the customer" required="1"/>
+                <group>
+                    <field name="attachment_ids" widget="many2many_binary" string="Attachments"/>
+                </group>
+                <footer>
+                    <button name="action_send" type="object" string="Send" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

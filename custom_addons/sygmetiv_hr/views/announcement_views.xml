@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_announcement_list" model="ir.ui.view">
+        <field name="name">syg.announcement.list</field>
+        <field name="model">syg.announcement</field>
+        <field name="arch" type="xml">
+            <list string="Announcements" decoration-info="state == 'draft'" decoration-success="state == 'published'" decoration-muted="state == 'archived'">
+                <field name="is_pinned" widget="boolean_toggle" optional="show"/>
+                <field name="name"/>
+                <field name="audience"/>
+                <field name="date_start"/>
+                <field name="date_end" optional="show"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'published'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_announcement_form" model="ir.ui.view">
+        <field name="name">syg.announcement.form</field>
+        <field name="model">syg.announcement</field>
+        <field name="arch" type="xml">
+            <form string="Announcement">
+                <header>
+                    <button name="action_publish" type="object" string="Publish" class="btn-primary" invisible="state == 'published'" groups="sygmetiv_hr.group_announcement_manager"/>
+                    <button name="action_draft" type="object" string="Reset to Draft" invisible="state == 'draft'" groups="sygmetiv_hr.group_announcement_manager"/>
+                    <button name="action_archive_announcement" type="object" string="Archive" invisible="state != 'published'" groups="sygmetiv_hr.group_announcement_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,published"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Announcement title"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="audience"/>
+                            <field name="is_pinned"/>
+                            <field name="user_id" widget="many2one_avatar_user" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="published_by" invisible="not published_by"/>
+                            <field name="published_date" invisible="not published_date"/>
+                        </group>
+                    </group>
+                    <field name="body" placeholder="Write the announcement…"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_syg_announcement_kanban" model="ir.ui.view">
+        <field name="name">syg.announcement.kanban</field>
+        <field name="model">syg.announcement</field>
+        <field name="arch" type="xml">
+            <kanban class="o_syg_announcement_kanban" sample="1">
+                <field name="name"/>
+                <field name="preview"/>
+                <field name="date_start"/>
+                <field name="audience"/>
+                <field name="state"/>
+                <field name="is_pinned"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.is_pinned.raw_value ? 'o_syg_announce_pinned' : ''}">
+                            <div class="fw-bold fs-5"><t t-esc="record.name.value"/></div>
+                            <div class="text-muted"><t t-esc="record.preview.value"/></div>
+                            <div class="mt-2 d-flex justify-content-between">
+                                <span><t t-esc="record.date_start.value"/></span>
+                                <field name="state" widget="badge"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_syg_announcement_search" model="ir.ui.view">
+        <field name="name">syg.announcement.search</field>
+        <field name="model">syg.announcement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="body"/>
+                <filter name="published" string="Published" domain="[('state', '=', 'published')]"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="pinned" string="Pinned" domain="[('is_pinned', '=', True)]"/>
+                <separator/>
+                <filter name="mine" string="My Announcements" domain="[('user_id', '=', uid)]"/>
+                <group>
+                    <filter name="group_audience" string="Audience" context="{'group_by': 'audience'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_syg_announcement" model="ir.actions.act_window">
+        <field name="name">Announcements</field>
+        <field name="res_model">syg.announcement</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="context">{'search_default_published': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Publish your first announcement
+            </p>
+            <p>
+                Share news, policy updates and reminders with employees and managers.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_syg_announcement_root"
+        name="Announcements"
+        action="action_syg_announcement"
+        sequence="26"
+        web_icon="mail,static/description/icon.png"
+        groups="sygmetiv_hr.group_announcement_user"/>
+</odoo>

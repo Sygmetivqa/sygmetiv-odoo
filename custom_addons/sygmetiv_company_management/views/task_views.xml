@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_search_form_syg" model="ir.ui.view">
+        <field name="name">project.task.search.syg</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='open_tasks']" position="after">
+                <filter string="Pending" name="syg_pending" domain="[('is_closed', '=', False)]"/>
+                <filter string="Today" name="syg_today"
+                    domain="[('date_deadline', '&gt;=', (context_today()).strftime('%Y-%m-%d 00:00:00')), ('date_deadline', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="This week" name="syg_this_week"
+                    domain="[('date_deadline', '&gt;=', (context_today() + relativedelta(days=-context_today().weekday())).strftime('%Y-%m-%d 00:00:00')), ('date_deadline', '&lt;', (context_today() + relativedelta(days=7-context_today().weekday())).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="Overdue" name="syg_overdue"
+                    domain="[('is_closed', '=', False), ('date_deadline', '&lt;', (context_today()).strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="No deadline" name="syg_no_deadline" domain="[('date_deadline', '=', False), ('is_closed', '=', False)]"/>
+                <separator/>
+                <filter string="Deadline" name="syg_deadline" date="date_deadline"/>
+            </xpath>
+            <xpath expr="//filter[@name='project']" position="after">
+                <filter string="Deadline day" name="syg_group_deadline" context="{'group_by': 'date_deadline:day'}"/>
+                <filter string="Task type" name="syg_group_task_type" context="{'group_by': 'syg_task_type_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_form_syg_type" model="ir.ui.view">
+        <field name="name">project.task.form.syg.type</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_task_request" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                        invisible="not syg_task_request_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Task Request</span>
+                        <span class="o_stat_value"><field name="syg_task_request_name" readonly="1" nolabel="1"/></span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][@class='o_task_customer_field']" position="attributes">
+                <attribute name="string">Customer</attribute>
+                <attribute name="invisible">has_template_ancestor or has_project_template</attribute>
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="syg_task_type_id" options="{'no_create': True}"/>
+                <field name="syg_is_meeting" invisible="1"/>
+                <field name="syg_attendee_ids" widget="many2many_avatar_employee" invisible="not syg_is_meeting" required="syg_is_meeting" options="{'no_create': True}"/>
+                <field name="syg_role" invisible="not syg_is_meeting" required="syg_is_meeting"/>
+                <field name="syg_presentation_time" widget="float_time" invisible="not syg_is_meeting" required="syg_is_meeting"/>
+                <field name="syg_vendor_id" options="{'no_create': True}"/>
+                <field name="syg_task_request_id" invisible="1" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_syg_task_board_list" model="ir.ui.view">
+        <field name="name">project.task.syg.board.list</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+            <list string="Task Board" default_order="date_deadline asc, priority desc" decoration-danger="is_closed == False and date_deadline and date_deadline &lt; datetime.datetime.combine(context_today(), datetime.time(0, 0, 0))" decoration-bf="not is_closed">
+                <field name="priority" optional="show" widget="priority"/>
+                <field name="name"/>
+                <field name="syg_task_type_id" optional="show"/>
+                <field name="project_id"/>
+                <field name="user_ids" widget="many2many_avatar_user"/>
+                <field name="date_deadline" optional="show"/>
+                <field name="stage_id"/>
+                <field name="is_closed" optional="hide"/>
+                <field name="allocated_hours" widget="float_time" optional="show" sum="Estimated"/>
+                <field name="effective_hours" widget="float_time" optional="show" sum="Spent"/>
+                <field name="remaining_hours" widget="float_time" optional="show" decoration-danger="remaining_hours &lt; 0"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_syg_task_board" model="ir.actions.act_window">
+        <field name="name">Task Board</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+        <field name="view_id" ref="view_syg_task_board_list"/>
+        <field name="context">{'search_default_syg_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No matching tasks</p>
+            <p>Use Pending, Today, This week and the other filters to see who is working on what.</p>
+        </field>
+    </record>
+</odoo>

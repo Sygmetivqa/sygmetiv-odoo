@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <delete model="ir.ui.view" id="view_syg_performance_dashboard_kpi"/>
+
+    <record id="view_syg_evaluation_dashboard_form" model="ir.ui.view">
+        <field name="name">syg.evaluation.dashboard.form</field>
+        <field name="model">syg.evaluation.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Evaluation Dashboard" create="0" delete="0" class="o_syg_dashboard">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <field name="is_manager" invisible="1"/>
+                    <div class="o_syg_eval_toolbar">
+                        <field name="employee_id" placeholder="All employees" options="{'no_create': True}" readonly="not is_manager"/>
+                        <button name="action_refresh" type="object" string="Refresh" class="btn btn-light"/>
+                    </div>
+                    <field name="kpi_dashboard_html" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_evaluation_dashboard" model="ir.actions.server">
+        <field name="name">Evaluation Dashboard</field>
+        <field name="model_id" ref="model_syg_evaluation_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open()</field>
+    </record>
+</odoo>

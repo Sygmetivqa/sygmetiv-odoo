@@ -1,0 +1,86 @@
+// Enterprise palette. This file is loaded before Community primary variables,
+// so later `!default` assignments keep these values.
+
+$o-white: #ffffff;
+$o-black: #000000;
+
+$o-gray-100: #f9fafb;
+$o-gray-200: #e7e9ed;
+$o-gray-300: #d8dadd;
+$o-gray-400: #9a9ca5;
+$o-gray-500: #7c7f89;
+$o-gray-600: #5f636f;
+$o-gray-700: #374151;
+$o-gray-800: #1f2937;
+$o-gray-900: #111827;
+
+$o-enterprise-color: #714b67;
+$o-enterprise-action-color: #017e84;
+
+$o-brand-odoo: $o-enterprise-color;
+$o-brand-primary: $o-brand-odoo;
+$o-brand-secondary: #8f8f8f;
+$o-brand-lightsecondary: $o-gray-100;
+
+$o-action: $o-enterprise-action-color;
+$o-main-link-color: $o-enterprise-action-color;
+
+$o-component-active-color: $o-black;
+$o-component-active-bg: mix($o-action, $o-white, 10%);
+$o-component-active-border: $o-action;
+
+$o-input-padding-y: 1px;
+$o-input-padding-x: 0;
+$o-input-border-required: $o-black;
+
+$o-list-group-active-color: $o-action;
+$o-list-group-active-bg: $o-component-active-bg;
+$o-list-footer-font-weight: 500;
+
+$o-form-lightsecondary: $o-gray-200;
+$o-badge-min-width: 2.7ch;
+
+$o-btns-bs-override: (
+    "primary": (
+        background: $o-brand-primary,
+        border: $o-brand-primary,
+        color: $o-white,
+
+        hover-background: darken($o-brand-primary, 10%),
+        hover-border: darken($o-brand-primary, 10%),
+        hover-color: $o-white,
+
+        active-background: mix($o-brand-primary, $o-white, 10%),
+        active-border: $o-brand-primary,
+        active-color: $o-brand-primary,
+    ),
+    "secondary": (
+        background: $o-gray-200,
+        border: $o-gray-200,
+        color: $o-gray-900,
+
+        hover-background: $o-gray-300,
+        hover-border: $o-gray-300,
+        hover-color: $o-black,
+
+        active-background: $o-component-active-bg,
+        active-border: $o-component-active-border,
+        active-color: $o-component-active-color,
+    ),
+);
+
+$o-btns-bs-outline-override: (
+    "secondary": (
+        background: transparent,
+        border: $o-gray-300,
+        color: $o-gray-900,
+
+        hover-background: $o-gray-200,
+        hover-border: $o-gray-300,
+        hover-color: $o-black,
+
+        active-background: mix($o-enterprise-action-color, $o-white, 10%),
+        active-border: $o-enterprise-action-color,
+        active-color: $o-component-active-color,
+    ),
+);

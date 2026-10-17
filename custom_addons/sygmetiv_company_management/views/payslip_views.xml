@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_payslip_list" model="ir.ui.view">
+        <field name="name">syg.payslip.list</field>
+        <field name="model">syg.payslip</field>
+        <field name="arch" type="xml">
+            <list string="Payslips">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="net_amount"/>
+                <field name="state" widget="badge" decoration-info="state == 'computed'" decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_payslip_form" model="ir.ui.view">
+        <field name="name">syg.payslip.form</field>
+        <field name="model">syg.payslip</field>
+        <field name="arch" type="xml">
+            <form string="Payslip">
+                <header>
+                    <button name="action_compute_sheet" type="object" string="Compute" class="btn-primary" invisible="state not in ('draft', 'computed')" groups="sygmetiv_company_management.group_syg_executive"/>
+                    <button name="action_done" type="object" string="Confirm" class="btn-primary" invisible="state not in ('draft', 'computed')" groups="sygmetiv_company_management.group_syg_executive"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state == 'cancel'" groups="sygmetiv_company_management.group_syg_executive"/>
+                    <button name="action_draft" type="object" string="Set to Draft" invisible="state != 'cancel'" groups="sygmetiv_company_management.group_syg_executive"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,computed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_move" type="object" class="oe_stat_button" icon="fa-book" invisible="not move_id">
+                            <span>Journal Entry</span>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Computation">
+                        <group>
+                            <field name="wage"/>
+                            <field name="timesheet_hours"/>
+                            <field name="overtime_hours"/>
+                        </group>
+                        <group>
+                            <field name="overtime_amount"/>
+                            <field name="allowance_amount"/>
+                            <field name="deduction_amount"/>
+                            <field name="net_amount"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom" create="0" delete="0">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="amount"/>
+                        </list>
+                    </field>
+                    <field name="note" placeholder="Internal note..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_payslip" model="ir.actions.act_window">
+        <field name="name">Payslips</field>
+        <field name="res_model">syg.payslip</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_syg_payslip_mine" model="ir.actions.act_window">
+        <field name="name">My Payslips</field>
+        <field name="res_model">syg.payslip</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('employee_id.user_id', '=', uid)]</field>
+    </record>
+</odoo>

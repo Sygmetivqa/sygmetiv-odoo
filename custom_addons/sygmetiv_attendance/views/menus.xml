@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_syg_attendance_geofence"
+        name="Attendance Locations"
+        parent="hr_attendance.menu_hr_attendance_root"
+        action="action_syg_attendance_geofence"
+        sequence="80"
+        groups="hr_attendance.group_hr_attendance_user"/>
+</odoo>

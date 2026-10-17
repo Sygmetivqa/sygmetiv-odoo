@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_syg_stock_root"
+        name="Inventory"
+        parent="sygmetiv_company_management.menu_syg_company_root"
+        sequence="26"
+        groups="stock.group_stock_user"/>
+
+    <menuitem
+        id="menu_syg_stock_receipts"
+        name="Receipts"
+        parent="menu_syg_stock_root"
+        action="stock.action_picking_tree_incoming"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_stock_deliveries"
+        name="Deliveries"
+        parent="menu_syg_stock_root"
+        action="stock.action_picking_tree_outgoing"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_stock_inventory"
+        name="Inventory"
+        parent="menu_syg_stock_root"
+        action="stock.action_view_quants"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_syg_stock_moves"
+        name="Moves History"
+        parent="menu_syg_stock_root"
+        action="stock.stock_move_line_action"
+        sequence="40"/>
+
+    <menuitem
+        id="menu_syg_stock_products"
+        name="Products"
+        parent="menu_syg_stock_root"
+        action="stock.product_template_action_product"
+        sequence="50"/>
+</odoo>

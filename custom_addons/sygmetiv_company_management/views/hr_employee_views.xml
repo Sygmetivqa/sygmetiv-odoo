@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_syg" model="ir.ui.view">
+        <field name="name">hr.employee.form.syg</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_syg_overtime" type="object" class="oe_stat_button" icon="fa-clock-o">
+                    <field name="syg_overtime_count" widget="statinfo" string="Overtime"/>
+                </button>
+                <button name="action_open_syg_payslips" type="object" class="oe_stat_button" icon="fa-money" groups="hr.group_hr_manager">
+                    <field name="syg_payslip_count" widget="statinfo" string="Payslips"/>
+                </button>
+                <button name="action_open_syg_reviews" type="object" class="oe_stat_button" icon="fa-star">
+                    <field name="syg_review_count" widget="statinfo" string="Reviews"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='hr_settings']" position="inside">
+                <group string="Community Payroll" groups="hr.group_hr_manager">
+                    <field name="syg_allowance_monthly"/>
+                    <field name="syg_deduction_monthly"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

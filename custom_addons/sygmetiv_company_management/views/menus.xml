@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_syg_menu_timesheets" model="ir.actions.server">
+        <field name="name">Timesheets</field>
+        <field name="model_id" ref="model_syg_workplace_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_menu_timesheets()</field>
+    </record>
+    <record id="action_syg_menu_attendance" model="ir.actions.server">
+        <field name="name">Attendances</field>
+        <field name="model_id" ref="model_syg_workplace_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_menu_attendance()</field>
+    </record>
+    <record id="action_syg_menu_timeoff" model="ir.actions.server">
+        <field name="name">Time Off</field>
+        <field name="model_id" ref="model_syg_workplace_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_menu_timeoff()</field>
+    </record>
+
+    <record id="menu_syg_company_root" model="ir.ui.menu">
+        <field name="name">Sygmetiv</field>
+        <field name="action" eval="False"/>
+        <field name="sequence">1</field>
+        <field name="web_icon">hr,static/description/icon.png</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <record id="menu_syg_employee_dashboard" model="ir.ui.menu">
+        <field name="name">Dashboard</field>
+        <field name="parent_id" ref="menu_syg_company_root"/>
+        <field name="action" ref="action_syg_employee_dashboard"/>
+        <field name="sequence">1</field>
+        <field name="group_ids" eval="[(5, 0, 0)]"/>
+    </record>
+
+
+    <menuitem
+        id="menu_syg_announcements"
+        name="Announcements"
+        parent="menu_syg_company_root"
+        action="sygmetiv_hr.action_syg_announcement"
+        sequence="3"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_people"
+        name="People"
+        parent="menu_syg_company_root"
+        sequence="10"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_employees"
+        name="Employees"
+        parent="menu_syg_people"
+        action="hr.open_view_employee_list_my"
+        sequence="10"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_departments"
+        name="Departments"
+        parent="menu_syg_people"
+        action="hr.hr_department_kanban_action"
+        sequence="15"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_recruitment"
+        name="Recruitment"
+        parent="menu_syg_people"
+        action="hr_recruitment.action_hr_job"
+        sequence="20"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_delivery"
+        name="Work"
+        parent="menu_syg_company_root"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_projects"
+        name="Projects"
+        parent="menu_syg_delivery"
+        action="project.open_view_project_all"
+        sequence="10"
+        groups="sygmetiv_company_management.group_company_manager"/>
+    <record id="menu_syg_projects" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="menu_syg_project_dashboard" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+
+    <menuitem
+        id="menu_syg_project_dashboard"
+        name="Project Dashboard"
+        parent="menu_syg_delivery"
+        action="action_syg_project_dashboard"
+        sequence="5"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_credential_app"
+        name="Credentials"
+        action="action_syg_credential"
+        sequence="26"
+        web_icon="project,static/description/icon.png"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_credentials"
+        name="Credentials"
+        parent="menu_syg_company_root"
+        action="action_syg_credential"
+        sequence="22"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_task_board"
+        name="Task Board"
+        parent="menu_syg_delivery"
+        action="action_syg_task_board"
+        sequence="15"/>
+
+    <menuitem
+        id="menu_syg_task_request"
+        name="Task Requests"
+        parent="menu_syg_delivery"
+        action="action_syg_task_request"
+        sequence="25"/>
+
+    <menuitem
+        id="menu_syg_assign_task"
+        name="Assign Task"
+        parent="menu_syg_delivery"
+        action="action_syg_task_assign"
+        sequence="30"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_time"
+        name="Time"
+        parent="menu_syg_company_root"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_syg_timesheets"
+        name="Timesheets"
+        parent="menu_syg_time"
+        action="action_syg_menu_timesheets"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_attendance"
+        name="Attendances"
+        parent="menu_syg_time"
+        action="action_syg_menu_attendance"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_timeoff"
+        name="Time Off"
+        parent="menu_syg_time"
+        action="action_syg_menu_timeoff"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_syg_overtime"
+        name="Overtime"
+        parent="menu_syg_time"
+        action="action_syg_overtime"
+        sequence="40"/>
+
+    <menuitem
+        id="menu_syg_overtime_approve"
+        name="Overtime to Approve"
+        parent="menu_syg_time"
+        action="action_syg_overtime_to_approve"
+        sequence="50"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_performance_app"
+        name="Performance"
+        action="action_syg_performance_dashboard"
+        sequence="25"
+        web_icon="hr,static/description/icon.png"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_perf_app_dashboard"
+        name="Dashboard"
+        parent="menu_syg_performance_app"
+        action="action_syg_performance_dashboard"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_perf_app_goals"
+        name="Goals"
+        parent="menu_syg_performance_app"
+        action="action_syg_goal"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_perf_app_reviews"
+        name="Reviews"
+        parent="menu_syg_performance_app"
+        action="action_syg_review"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_performance"
+        name="Performance"
+        parent="menu_syg_company_root"
+        sequence="40"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_my_review"
+        name="My Review"
+        parent="menu_syg_performance"
+        action="action_syg_review_mine"
+        sequence="15"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_performance_dashboard"
+        name="Dashboard"
+        parent="menu_syg_performance"
+        action="action_syg_performance_dashboard"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_syg_goals"
+        name="Goals"
+        parent="menu_syg_performance"
+        action="action_syg_goal"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_reviews"
+        name="Reviews"
+        parent="menu_syg_performance"
+        action="action_syg_review"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_payroll"
+        name="Payroll"
+        parent="menu_syg_company_root"
+        sequence="50"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_payslips_mine"
+        name="My Payslips"
+        parent="menu_syg_payroll"
+        action="action_syg_payslip_mine"
+        sequence="5"
+        groups="sygmetiv_company_management.group_company_user"/>
+
+    <menuitem
+        id="menu_syg_payslips"
+        name="Payslips"
+        parent="menu_syg_payroll"
+        action="action_syg_payslip"
+        sequence="10"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_payslip_generate"
+        name="Generate Payslips"
+        parent="menu_syg_payroll"
+        action="action_syg_payslip_generate"
+        sequence="20"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_expenses"
+        name="Expenses"
+        parent="menu_syg_company_root"
+        action="hr_expense.hr_expense_actions_my_all"
+        sequence="55"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_config"
+        name="Configuration"
+        parent="menu_syg_company_root"
+        sequence="90"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_syg_settings"
+        name="Settings"
+        parent="menu_syg_config"
+        action="hr.hr_config_settings_action"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_task_type"
+        name="Task Types"
+        parent="menu_syg_config"
+        action="action_syg_task_type"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_attendance_geofence"
+        name="Attendance Locations"
+        parent="menu_syg_config"
+        action="sygmetiv_attendance.action_syg_attendance_geofence"
+        sequence="25"
+        groups="hr_attendance.group_hr_attendance_user"/>
+
+    <menuitem
+        id="menu_project_app_dashboard"
+        name="Dashboard"
+        parent="project.menu_main_pm"
+        action="action_syg_project_dashboard"
+        sequence="0"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_project_app_task_board"
+        name="Task Board"
+        parent="project.menu_main_pm"
+        action="action_syg_task_board"
+        sequence="3"
+        groups="project.group_project_user"/>
+
+    <menuitem
+        id="menu_project_task_type"
+        name="Task Types"
+        parent="project.menu_project_config"
+        action="action_syg_task_type"
+        sequence="25"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_project_live_checklist"
+        name="Live Checklist"
+        parent="project.menu_project_config"
+        action="action_syg_live_checklist"
+        sequence="30"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <record id="menu_syg_performance_app" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="menu_syg_performance" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_user')])]"/>
+    </record>
+    <record id="menu_syg_performance_dashboard" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="menu_syg_goals" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="menu_syg_reviews" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="menu_syg_expenses" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="hr_expense.menu_hr_expense_root" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="project.menu_main_pm" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="sygmetiv_hr.menu_syg_announcement_root" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <record id="menu_syg_announcements" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
+    <function model="ir.ui.menu" name="_syg_restrict_optional_menus"/>
+</odoo>

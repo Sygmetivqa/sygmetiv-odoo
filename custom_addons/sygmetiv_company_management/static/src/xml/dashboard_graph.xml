@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sygmetiv_company_management.SygDashboardGraphField">
+        <div class="o_dashboard_graph o_syg_dashboard_graph" t-attf-class="o_graph_{{ graphType }}chart">
+            <canvas t-ref="canvas"/>
+        </div>
+    </t>
+</templates>

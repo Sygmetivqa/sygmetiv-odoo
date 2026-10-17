@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="kpi_status_developing" model="syg.kpi.status">
+        <field name="name">Developing</field>
+        <field name="from_score">0</field>
+        <field name="to_score">40</field>
+    </record>
+    <record id="kpi_status_meets" model="syg.kpi.status">
+        <field name="name">Meets expectations</field>
+        <field name="from_score">40.01</field>
+        <field name="to_score">70</field>
+    </record>
+    <record id="kpi_status_exceeds" model="syg.kpi.status">
+        <field name="name">Exceeds expectations</field>
+        <field name="from_score">70.01</field>
+        <field name="to_score">1000</field>
+    </record>
+</odoo>

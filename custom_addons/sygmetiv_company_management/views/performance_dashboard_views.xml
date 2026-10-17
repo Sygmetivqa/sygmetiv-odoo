@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_performance_dashboard_form" model="ir.ui.view">
+        <field name="name">syg.performance.dashboard.form</field>
+        <field name="model">syg.performance.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Performance Dashboard" create="0" delete="0" class="o_syg_dashboard">
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <field name="is_manager" invisible="1"/>
+                    <div class="o_syg_dash_hero">
+                        <div class="o_syg_dash_hero_copy">
+                            <div class="o_syg_dash_kicker">Sygmetiv · Performance</div>
+                            <h1>Hours and delivery</h1>
+                            <div class="o_syg_dash_subtitle">
+                                Timesheets plus task-request hours, by employee, project and task type
+                            </div>
+                        </div>
+                        <div class="o_syg_dash_hero_actions">
+                            <field name="employee_id" placeholder="All employees" options="{'no_create': True}" readonly="not is_manager"/>
+                            <div class="o_syg_period_pill">
+                                <i class="fa fa-calendar"/>
+                                <field name="period_start" widget="daterange" options="{'end_date_field': 'period_end'}" nolabel="1"/>
+                                <field name="period_end" invisible="1"/>
+                            </div>
+                            <button name="action_refresh" type="object" string="Refresh" class="btn btn-light o_syg_btn_ghost"/>
+                        </div>
+                    </div>
+                    <div class="o_syg_section_title">Combined hours</div>
+                    <div class="o_syg_kpi_grid">
+                        <div class="o_syg_kpi_card o_syg_accent_teal o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-clock-o"/></span><span class="o_syg_kpi_label">Hours worked</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_hours" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <button name="action_open_timesheets" type="object" class="o_syg_kpi_card o_syg_accent_green">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-check-square-o"/></span><span class="o_syg_kpi_label">Task hours</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_timesheet" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <button name="action_open_requests" type="object" class="o_syg_kpi_card o_syg_accent_amber">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-pencil-square-o"/></span><span class="o_syg_kpi_label">Request hours</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_request_hours" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <div class="o_syg_kpi_card o_syg_accent_violet o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-users"/></span><span class="o_syg_kpi_label">Employees</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_employees" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <button name="action_open_projects" type="object" class="o_syg_kpi_card o_syg_accent_sky">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-folder-open"/></span><span class="o_syg_kpi_label">Projects</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_projects" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <button name="action_open_tasks" type="object" class="o_syg_kpi_card o_syg_accent_violet">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-tasks"/></span><span class="o_syg_kpi_label">Tasks</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_tasks" nolabel="1" readonly="1"/></div>
+                        </button>
+                        <div class="o_syg_kpi_card o_syg_accent_rose o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-tags"/></span><span class="o_syg_kpi_label">Task types</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_types" nolabel="1" readonly="1"/></div>
+                        </div>
+                        <div class="o_syg_kpi_card o_syg_accent_amber o_syg_kpi_static">
+                            <div class="o_syg_kpi_top"><span class="o_syg_kpi_icon"><i class="fa fa-file-text-o"/></span><span class="o_syg_kpi_label">Task requests</span></div>
+                            <div class="o_syg_kpi_value"><field name="d_requests" nolabel="1" readonly="1"/></div>
+                        </div>
+                    </div>
+                    <div class="o_syg_section_title">Employee work by project and task type</div>
+                    <group class="o_syg_source_checks" col="4">
+                        <field name="include_project_task" string="Project task"/>
+                        <field name="include_task_request" string="Task request"/>
+                    </group>
+                    <div class="o_syg_chart_grid">
+                        <div class="o_syg_chart_card o_syg_chart_wide">
+                            <div class="o_syg_kpi_label">Hours from project tasks and task requests, stacked by task type</div>
+                            <field name="graph_employee_work" widget="syg_dashboard_graph" options="{'graph_type': 'stacked'}" nolabel="1"/>
+                        </div>
+                        <div class="o_syg_chart_card o_syg_chart_wide">
+                            <div class="o_syg_kpi_label">Hours by employee</div>
+                            <field name="graph_employee_hours" widget="syg_dashboard_graph" options="{'graph_type': 'bar', 'color_offset': 4}" nolabel="1"/>
+                        </div>
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Hours by task type</div>
+                            <field name="graph_task_type" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Hours by project</div>
+                            <field name="graph_projects" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                        <div class="o_syg_chart_card">
+                            <div class="o_syg_kpi_label">Projects by task type</div>
+                            <field name="graph_type_projects" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_performance_dashboard" model="ir.actions.server">
+        <field name="name">Performance Dashboard</field>
+        <field name="model_id" ref="model_syg_performance_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open()</field>
+    </record>
+</odoo>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_approval" model="ir.ui.view">
+        <field name="name">purchase.order.form.approval</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@id='bid_confirm']" position="attributes">
+                <attribute name="invisible">state != 'sent' or not is_purchase_approver</attribute>
+            </xpath>
+            <xpath expr="//header/button[@id='draft_confirm']" position="attributes">
+                <attribute name="invisible">state != 'draft' or not is_purchase_approver</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='button_approve']" position="attributes">
+                <attribute name="groups">sygmetiv_purchase.group_purchase_approver</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='button_approve']" position="after">
+                <button
+                    string="Submit for Approval"
+                    name="action_request_approval"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state not in ('draft', 'sent') or is_purchase_approver"/>
+                <button
+                    string="Reject"
+                    name="action_reject_approval"
+                    type="object"
+                    groups="sygmetiv_purchase.group_purchase_approver"
+                    invisible="state != 'to approve'"
+                    confirm="Reject this RFQ and set it back to RFQ?"/>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,to approve,purchase</attribute>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="after">
+                <field name="is_purchase_approver" invisible="1"/>
+            </xpath>
+            <xpath expr="//header" position="after">
+                <div class="alert alert-info" role="alert" invisible="state != 'to approve'">
+                    This RFQ is waiting for a Purchase Approver.
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="approval_requested_by" invisible="not approval_requested_by and state != 'to approve'"/>
+                <field name="approval_requested_date" invisible="not approval_requested_date and state != 'to approve'"/>
+                <field name="approved_by" invisible="not approved_by"/>
+                <field name="approved_date" invisible="not approved_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_filter_approval" model="ir.ui.view">
+        <field name="name">purchase.order.list.select.approval</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='to_approve']" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="string">Waiting Approval</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_purchase_order_to_approve" model="ir.actions.act_window">
+        <field name="name">RFQs to Approve</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">list,kanban,form,activity</field>
+        <field name="domain">[('state', '=', 'to approve')]</field>
+        <field name="context">{'search_default_to_approve': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No RFQs waiting for approval
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_purchase_order_to_approve"
+        name="RFQs to Approve"
+        parent="purchase.menu_procurement_management"
+        action="action_purchase_order_to_approve"
+        groups="sygmetiv_purchase.group_purchase_approver"
+        sequence="5"/>
+</odoo>

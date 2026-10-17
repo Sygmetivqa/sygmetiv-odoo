@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_template_overtime_request" model="mail.template">
+            <field name="name">Overtime: Approval Request</field>
+            <field name="model_id" ref="model_syg_overtime_request"/>
+            <field name="subject">{{ object.company_id.name }} - Overtime to approve ({{ object.name }})</field>
+            <field name="email_from">{{ (object.employee_id.work_email or object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>
+        <t t-out="object.employee_id.name"/> requested
+        <strong t-out="object.hours"/> overtime hours on
+        <t t-out="object.date"/>.
+    </p>
+    <p t-out="object.reason"/>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/syg.overtime.request/{{ object.id }}">Open request</a>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_overtime_done" model="mail.template">
+            <field name="name">Overtime: Decision</field>
+            <field name="model_id" ref="model_syg_overtime_request"/>
+            <field name="subject">{{ object.company_id.name }} - Overtime {{ object.state }} ({{ object.name }})</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>
+        Overtime request <strong t-out="object.name"/> is now
+        <t t-out="object.state"/>.
+    </p>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/syg.overtime.request/{{ object.id }}">Open request</a>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_performance_review" model="mail.template">
+            <field name="name">Performance Review</field>
+            <field name="model_id" ref="model_syg_performance_review"/>
+            <field name="subject">{{ object.company_id.name }} - Performance review ({{ object.name }})</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>
+        Performance review <strong t-out="object.name"/> for
+        <t t-out="object.employee_id.name"/> is
+        <t t-out="object.state"/>.
+        Overall score: <t t-out="object.overall_score"/>.
+    </p>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/syg.performance.review/{{ object.id }}">Open review</a>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

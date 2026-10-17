@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_template_announcement_published" model="mail.template">
+            <field name="name">Announcement: Published</field>
+            <field name="model_id" ref="model_syg_announcement"/>
+            <field name="subject">{{ object.company_id.name }} - {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or object.user_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>A new announcement has been published:</p>
+    <h3 t-out="object.name or ''"/>
+    <div t-out="object.body"/>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/syg.announcement/{{ object.id }}">Open announcement</a>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

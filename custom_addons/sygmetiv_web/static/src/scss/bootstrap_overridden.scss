@@ -1,0 +1,49 @@
+// Enterprise component colors. Loaded before Community bootstrap overrides.
+
+$light: $o-white;
+$dark: $o-gray-900;
+$warning: #e99d00;
+$danger: #d44c59;
+
+$enable-shadows: true;
+
+$component-active-color: unset;
+$component-active-bg: mix($o-enterprise-action-color, $o-white, 10%);
+
+$h1-font-size: $o-font-size-base * 2.4;
+$h2-font-size: $o-font-size-base * 1.5;
+$h3-font-size: $o-font-size-base * 1.3;
+$h4-font-size: $o-font-size-base * 1.2;
+$h5-font-size: $o-font-size-base * 1.1;
+
+$btn-transition: none;
+$btn-box-shadow: 0;
+$btn-active-box-shadow: 0;
+$btn-focus-box-shadow: 0;
+
+$dropdown-box-shadow: 0 0.3rem 1rem rgba(#000, 0.1);
+
+$input-border-color: $o-gray-200;
+$input-box-shadow: 0;
+$input-focus-bg: $o-white;
+$input-focus-box-shadow: 0;
+$input-focus-border-color: mix($o-enterprise-action-color, $o-gray-200);
+
+$form-check-input-checked-color: $o-white;
+$form-check-input-checked-border-color: $o-enterprise-action-color;
+$form-check-input-checked-bg-color: $o-enterprise-action-color;
+$form-select-focus-box-shadow: 0;
+
+$nav-link-color: $o-main-text-color;
+$nav-tabs-link-active-color: $o-main-headings-color;
+$nav-tabs-link-active-bg: transparent;
+
+$badge-font-weight: normal;
+$alert-border-width: 0;
+
+$list-group-active-color: $o-enterprise-action-color;
+$list-group-active-bg: $component-active-bg;
+$list-group-active-border-color: $o-enterprise-action-color;
+
+$breadcrumb-active-color: $o-main-text-color;
+$breadcrumb-divider-color: $o-main-color-muted;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sygmetiv_attendance.Many2ManyLinksField" t-inherit="web.Many2ManyTagsField" t-inherit-mode="primary">
+        <xpath expr="//TagsList" position="replace">
+            <div class="d-flex flex-wrap column-gap-3 row-gap-1">
+                <span t-foreach="tags" t-as="tag" t-key="tag.id" class="d-inline-flex align-items-center">
+                    <button type="button" class="btn btn-link p-0" t-on-click.prevent="() => this.onLinkClick(tag)" t-esc="tag.text"/>
+                    <button t-if="tag.onDelete" type="button" class="btn btn-link text-danger p-0 ms-1" aria-label="Remove" t-on-click.prevent="() => tag.onDelete()">
+                        <i class="fa fa-times"/>
+                    </button>
+                </span>
+            </div>
+        </xpath>
+    </t>
+</templates>

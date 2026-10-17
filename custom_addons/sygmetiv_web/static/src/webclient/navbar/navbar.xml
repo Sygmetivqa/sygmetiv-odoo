@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="sygmetiv_web.NavBar" t-inherit="web.NavBar" t-inherit-mode="primary">
+        <xpath expr="//nav" position="attributes">
+            <attribute name="t-ref">nav</attribute>
+        </xpath>
+        <xpath expr="//t[@t-call='web.NavBar.AppsMenu']" position="replace">
+            <a
+                t-if="!isScopedApp"
+                href="/odoo"
+                class="o_menu_toggle border-0"
+                t-att-class="{'hasImage': currentApp and currentApp.webIconData}"
+                accesskey="h"
+                t-ref="menuApps"
+                t-on-click.prevent="() => { env.isSmall ? this._openAppMenuSidebar() : this.hm.toggle() }"
+            >
+                <t t-if="env.isSmall and !hm.hasHomeMenu">
+                    <t t-call="web.NavBar.AppsMenu.Sidebar"/>
+                </t>
+                <t t-else="">
+                    <svg class="o_menu_toggle_icon pe-none" width="14px" height="14px" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+                        <g fill="currentColor">
+                            <rect width="3" height="3" x="0" y="0"/>
+                            <rect width="3" height="3" x="5" y="0"/>
+                            <rect width="3" height="3" x="10" y="0"/>
+                            <rect width="3" height="3" x="0" y="5"/>
+                            <rect width="3" height="3" x="5" y="5"/>
+                            <rect width="3" height="3" x="10" y="5"/>
+                            <rect width="3" height="3" x="0" y="10"/>
+                            <rect width="3" height="3" x="5" y="10"/>
+                            <rect width="3" height="3" x="10" y="10"/>
+                        </g>
+                    </svg>
+                    <t t-if="!env.isSmall and currentApp">
+                        <img
+                            t-if="currentApp.webIconData"
+                            t-att-src="currentApp.webIconData"
+                            class="o_menu_brand_icon d-inline position-absolute start-0 h-100 ps-1 ms-2"
+                            t-att-alt="currentApp.name"
+                        />
+                        <span t-esc="currentApp.name" class="o_menu_brand d-flex ms-3 pe-0"/>
+                    </t>
+                </t>
+            </a>
+        </xpath>
+        <xpath expr="//DropdownItem[@t-esc='currentApp.name']" position="replace"/>
+    </t>
+
+    <t t-name="sygmetiv_web.NavBar.SectionsMenu" t-inherit="web.NavBar.SectionsMenu" t-inherit-mode="extension">
+        <xpath expr="//Dropdown/button" position="attributes">
+            <attribute name="class" add="fw-normal" separator=" "/>
+        </xpath>
+    </t>
+</templates>

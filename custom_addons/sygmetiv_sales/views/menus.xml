@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_syg_sales_root"
+        name="Sales"
+        parent="sygmetiv_company_management.menu_syg_company_root"
+        sequence="22"
+        groups="sales_team.group_sale_salesman"/>
+
+    <menuitem
+        id="menu_syg_sales_dashboard"
+        name="Dashboard"
+        parent="menu_syg_sales_root"
+        action="action_syg_sales_dashboard"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_syg_sales_quotations"
+        name="Quotations"
+        parent="menu_syg_sales_root"
+        action="sale.action_quotations_with_onboarding"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_sales_orders"
+        name="Sales Orders"
+        parent="menu_syg_sales_root"
+        action="sale.action_orders"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_sales_leads"
+        name="Leads"
+        parent="menu_syg_sales_root"
+        action="crm.crm_lead_all_leads"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_syg_sales_analysis"
+        name="Sales Analysis"
+        parent="menu_syg_sales_root"
+        action="sale.action_order_report_all"
+        sequence="40"/>
+
+    <menuitem
+        id="menu_sale_app_dashboard"
+        name="Dashboard"
+        parent="sale.sale_menu_root"
+        action="action_syg_sales_dashboard"
+        sequence="1"
+        groups="sales_team.group_sale_salesman"/>
+</odoo>

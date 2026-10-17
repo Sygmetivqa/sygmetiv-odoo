@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_task_type_list" model="ir.ui.view">
+        <field name="name">syg.task.type.list</field>
+        <field name="model">syg.task.type</field>
+        <field name="arch" type="xml">
+            <list string="Task Types" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_meeting"/>
+                <field name="color" widget="color_picker"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_task_type_form" model="ir.ui.view">
+        <field name="name">syg.task.type.form</field>
+        <field name="model">syg.task.type</field>
+        <field name="arch" type="xml">
+            <form string="Task Type">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="is_meeting"/>
+                        <field name="color" widget="color_picker"/>
+                        <field name="active"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_task_type" model="ir.actions.act_window">
+        <field name="name">Task Types</field>
+        <field name="res_model">syg.task.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a task type</p>
+            <p>Use types such as Development, Support or AMC on task requests and project tasks.</p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,19 @@
+.o_main_navbar {
+    --NavBar-entry-color: #{$o-main-text-color};
+    --NavBar-entry-color--hover: #{$o-black};
+    --NavBar-entry-color--active: #{$o-black};
+    --NavBar-entry-borderColor-active: #{$o-component-active-border};
+    --NavBar-entry-backgroundColor--active: #{$o-component-active-bg};
+    --NavBar-entry-backgroundColor--hover: #{$o-gray-200};
+    --NavBar-entry-backgroundColor--focus: #{$o-gray-200};
+    --NavBar-brand-color: #{$o-main-text-color};
+    --Dropdown_menu-margin-y: #{map-get($spacers, 1)};
+
+    background: $o-white;
+    border-bottom: 0;
+    color: $o-main-text-color;
+
+    .o_menu_toggle {
+        color: var(--NavBar-menuToggle-color, #{$o-brand-odoo});
+    }
+}

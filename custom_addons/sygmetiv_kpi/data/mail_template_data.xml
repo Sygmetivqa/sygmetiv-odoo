@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_template_kpi_evaluation" model="mail.template">
+        <field name="name">KPI: Enter scores</field>
+        <field name="model_id" ref="model_syg_kpi_evaluation"/>
+        <field name="subject">{{ object.company_id.name or '' }} - KPI evaluation for {{ object.employee_id.name }}</field>
+        <field name="email_from">{{ user.email_formatted or object.company_id.email_formatted }}</field>
+        <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>
+        You are an evaluator for <strong t-out="object.employee_id.name"/>.
+        The <t t-out="object.evaluation_type"/> period is
+        <t t-out="object.date_start"/> to <t t-out="object.date_end"/>.
+    </p>
+    <p>Open the evaluation and enter the score for each criteria assigned to you.</p>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/syg.kpi.evaluation/{{ object.id }}">Open evaluation</a>
+    </p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="mail_template_kpi_evaluator_portal" model="mail.template">
+        <field name="name">KPI: Evaluator score link</field>
+        <field name="model_id" ref="model_syg_kpi_evaluator_access"/>
+        <field name="subject">KPI evaluation - enter your scores</field>
+        <field name="email_from">{{ (object.evaluation_ids[:1].company_id.email_formatted if object.evaluation_ids and object.evaluation_ids[:1].company_id else '') or user.email_formatted or '' }}</field>
+        <field name="email_to">{{ object.user_id.email or '' }}</field>
+        <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif;">
+    <p>Hello <t t-out="object.user_id.name or ''"/>,</p>
+    <p>Please enter your KPI scores for the employees below. No further approval is required after you save the scores.</p>
+    <ul>
+        <t t-foreach="object.evaluation_ids" t-as="evaluation">
+            <li>
+                <t t-out="evaluation.employee_id.name or ''"/>
+                (<t t-out="evaluation.date_start or ''"/> to <t t-out="evaluation.date_end or ''"/>)
+            </li>
+        </t>
+    </ul>
+    <p style="margin: 24px 0;">
+        <a t-att-href="object._get_score_portal_url()"
+           style="padding: 12px 24px; background-color: #714B67; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+            Enter scores
+        </a>
+    </p>
+    <p style="color: #666;">Or copy this link: <t t-out="object._get_score_portal_url()"/></p>
+</div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

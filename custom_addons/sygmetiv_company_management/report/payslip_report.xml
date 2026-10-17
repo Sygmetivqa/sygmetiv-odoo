@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_syg_payslip" model="ir.actions.report">
+        <field name="name">Payslip</field>
+        <field name="model">syg.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sygmetiv_company_management.report_syg_payslip_document</field>
+        <field name="report_file">sygmetiv_company_management.report_syg_payslip_document</field>
+        <field name="binding_model_id" ref="model_syg_payslip"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Payslip - %s' % (object.name)</field>
+    </record>
+
+    <template id="report_syg_payslip_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Payslip <span t-field="o.name"/></h2>
+                        <p>
+                            Employee: <span t-field="o.employee_id"/><br/>
+                            Period: <span t-field="o.date_from"/> - <span t-field="o.date_to"/>
+                        </p>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Code</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-field="line.name"/></td>
+                                    <td><span t-field="line.code"/></td>
+                                    <td class="text-end"><span t-field="line.amount"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="text-end">
+                            <strong>Net: <span t-field="o.net_amount"/></strong>
+                        </p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

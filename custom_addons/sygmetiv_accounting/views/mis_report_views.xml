@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_mis_report_form" model="ir.ui.view">
+        <field name="name">syg.mis.report.form</field>
+        <field name="model">syg.mis.report</field>
+        <field name="arch" type="xml">
+            <form string="Accounting Report" create="0" delete="0" class="o_syg_mis_form o_form_nosheet">
+                    <div class="o_syg_mis_toolbar">
+                        <group>
+                            <field name="report_type"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="period_start" widget="daterange" options="{'end_date_field': 'period_end'}" string="Date Range"/>
+                            <field name="period_end" invisible="1"/>
+                            <field name="compare_previous" string="Comparison"/>
+                            <field name="hide_zero" string="Hide zeros"/>
+                        </group>
+                        <div class="o_syg_mis_toolbar_actions">
+                            <button name="action_period_month" type="object" string="This Month" class="btn btn-secondary"/>
+                            <button name="action_period_quarter" type="object" string="This Quarter" class="btn btn-secondary"/>
+                            <button name="action_period_year" type="object" string="This Year" class="btn btn-secondary"/>
+                            <button name="action_compute" type="object" string="Refresh" class="btn btn-secondary"/>
+                            <button name="action_print" type="object" string="PDF" class="btn btn-primary"/>
+                            <button name="action_export_xlsx" type="object" string="Excel" class="btn btn-primary"/>
+                        </div>
+                        <field name="show_aged" invisible="1"/>
+                        <field name="show_trial" invisible="1"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="line_ids" invisible="1">
+                            <list>
+                                <field name="name"/>
+                            </list>
+                        </field>
+                    </div>
+                    <field name="report_payload" widget="syg_mis_board" nolabel="1" class="o_syg_mis_payload w-100"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_mis_report" model="ir.actions.act_window">
+        <field name="name">Accounting Reports</field>
+        <field name="res_model">syg.mis.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'form_view_initial_mode': 'edit'}</field>
+    </record>
+
+    <record id="action_syg_mis_executive" model="ir.actions.server">
+        <field name="name">Executive MIS</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('executive')</field>
+    </record>
+    <record id="action_syg_mis_pnl" model="ir.actions.server">
+        <field name="name">Profit and Loss</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('pnl')</field>
+    </record>
+    <record id="action_syg_mis_balance_sheet" model="ir.actions.server">
+        <field name="name">Balance Sheet</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('balance_sheet')</field>
+    </record>
+    <record id="action_syg_mis_trial_balance" model="ir.actions.server">
+        <field name="name">Trial Balance</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('trial_balance')</field>
+    </record>
+    <record id="action_syg_mis_cash_flow" model="ir.actions.server">
+        <field name="name">Cash Flow</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('cash_flow')</field>
+    </record>
+    <record id="action_syg_mis_partner_ledger" model="ir.actions.server">
+        <field name="name">Partner Ledger</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('partner_ledger')</field>
+    </record>
+    <record id="action_syg_mis_aged_receivable" model="ir.actions.server">
+        <field name="name">Aged Receivable</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('aged_receivable')</field>
+    </record>
+    <record id="action_syg_mis_aged_payable" model="ir.actions.server">
+        <field name="name">Aged Payable</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('aged_payable')</field>
+    </record>
+    <record id="action_syg_mis_tax" model="ir.actions.server">
+        <field name="name">Tax Summary</field>
+        <field name="model_id" ref="model_syg_mis_report"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open('tax')</field>
+    </record>
+</odoo>

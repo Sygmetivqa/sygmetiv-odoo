@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_syg_accounting_root"
+        name="Accounting"
+        parent="sygmetiv_company_management.menu_syg_company_root"
+        sequence="60"
+        groups="account.group_account_readonly"/>
+
+    <menuitem
+        id="menu_syg_accounting_dashboard"
+        name="Dashboard"
+        parent="menu_syg_accounting_root"
+        action="action_syg_accounting_dashboard"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_syg_accounting_reports"
+        name="Reports"
+        parent="menu_syg_accounting_root"
+        sequence="10"
+        groups="account.group_account_readonly"/>
+
+    <menuitem
+        id="menu_syg_mis_reports"
+        name="MIS Reports"
+        parent="menu_syg_accounting_reports"
+        sequence="1"/>
+
+    <menuitem id="menu_syg_mis_executive" name="Executive MIS" parent="menu_syg_mis_reports" action="action_syg_mis_executive" sequence="1"/>
+    <menuitem id="menu_syg_mis_pnl" name="Profit and Loss" parent="menu_syg_mis_reports" action="action_syg_mis_pnl" sequence="10"/>
+    <menuitem id="menu_syg_mis_balance_sheet" name="Balance Sheet" parent="menu_syg_mis_reports" action="action_syg_mis_balance_sheet" sequence="20"/>
+    <menuitem id="menu_syg_mis_trial_balance" name="Trial Balance" parent="menu_syg_mis_reports" action="action_syg_mis_trial_balance" sequence="30"/>
+    <menuitem id="menu_syg_mis_cash_flow" name="Cash Flow" parent="menu_syg_mis_reports" action="action_syg_mis_cash_flow" sequence="40"/>
+    <menuitem id="menu_syg_mis_partner_ledger" name="Partner Ledger" parent="menu_syg_mis_reports" action="action_syg_mis_partner_ledger" sequence="50"/>
+    <menuitem id="menu_syg_mis_aged_receivable" name="Aged Receivable" parent="menu_syg_mis_reports" action="action_syg_mis_aged_receivable" sequence="60"/>
+    <menuitem id="menu_syg_mis_aged_payable" name="Aged Payable" parent="menu_syg_mis_reports" action="action_syg_mis_aged_payable" sequence="70"/>
+    <menuitem id="menu_syg_mis_tax" name="Tax Summary" parent="menu_syg_mis_reports" action="action_syg_mis_tax" sequence="80"/>
+
+    <menuitem
+        id="menu_syg_report_invoice_analysis"
+        name="Invoice Analysis"
+        parent="menu_syg_accounting_reports"
+        action="account.action_account_invoice_report_all"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_report_bill_analysis"
+        name="Bills Analysis"
+        parent="menu_syg_accounting_reports"
+        action="account.action_account_invoice_report_all_supp"
+        sequence="15"/>
+
+    <menuitem
+        id="menu_syg_report_analytic"
+        name="Analytic Report"
+        parent="menu_syg_accounting_reports"
+        action="account.action_analytic_reporting"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_report_profit_loss"
+        name="Profit and Loss"
+        parent="menu_syg_accounting_reports"
+        action="action_syg_profit_loss"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_syg_report_balance_sheet"
+        name="Balance Sheet"
+        parent="menu_syg_accounting_reports"
+        action="action_syg_balance_sheet"
+        sequence="40"/>
+
+    <menuitem
+        id="menu_syg_report_general_ledger"
+        name="General Ledger"
+        parent="menu_syg_accounting_reports"
+        action="action_syg_general_ledger"
+        sequence="50"/>
+
+    <menuitem
+        id="menu_syg_report_aged_receivable"
+        name="Aged Receivable"
+        parent="menu_syg_accounting_reports"
+        action="action_syg_aged_receivable"
+        sequence="60"/>
+
+    <menuitem
+        id="menu_syg_report_aged_payable"
+        name="Aged Payable"
+        parent="menu_syg_accounting_reports"
+        action="action_syg_aged_payable"
+        sequence="70"/>
+
+    <menuitem
+        id="menu_syg_accounting_journals"
+        name="Journals"
+        parent="menu_syg_accounting_root"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_journal_entries"
+        name="Journal Entries"
+        parent="menu_syg_accounting_journals"
+        action="account.action_move_journal_line"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_journal_items"
+        name="Journal Items"
+        parent="menu_syg_accounting_journals"
+        action="account.action_account_moves_all"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_accounting_invoicing"
+        name="Invoicing"
+        parent="menu_syg_accounting_root"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_syg_customer_invoices"
+        name="Customer Invoices"
+        parent="menu_syg_accounting_invoicing"
+        action="account.action_move_out_invoice"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_syg_vendor_bills"
+        name="Vendor Bills"
+        parent="menu_syg_accounting_invoicing"
+        action="account.action_move_in_invoice"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_syg_customer_payments"
+        name="Customer Payments"
+        parent="menu_syg_accounting_invoicing"
+        action="account.action_account_payments"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_syg_vendor_payments"
+        name="Vendor Payments"
+        parent="menu_syg_accounting_invoicing"
+        action="account.action_account_payments_payable"
+        sequence="40"/>
+
+    <menuitem
+        id="menu_account_mis_reports"
+        name="MIS Reports"
+        parent="account.menu_finance_reports"
+        sequence="0"
+        groups="account.group_account_readonly"/>
+
+    <menuitem id="menu_account_mis_executive" name="Executive MIS" parent="menu_account_mis_reports" action="action_syg_mis_executive" sequence="1"/>
+    <menuitem id="menu_account_mis_pnl" name="Profit and Loss" parent="menu_account_mis_reports" action="action_syg_mis_pnl" sequence="10"/>
+    <menuitem id="menu_account_mis_balance_sheet" name="Balance Sheet" parent="menu_account_mis_reports" action="action_syg_mis_balance_sheet" sequence="20"/>
+    <menuitem id="menu_account_mis_trial_balance" name="Trial Balance" parent="menu_account_mis_reports" action="action_syg_mis_trial_balance" sequence="30"/>
+    <menuitem id="menu_account_mis_cash_flow" name="Cash Flow" parent="menu_account_mis_reports" action="action_syg_mis_cash_flow" sequence="40"/>
+    <menuitem id="menu_account_mis_partner_ledger" name="Partner Ledger" parent="menu_account_mis_reports" action="action_syg_mis_partner_ledger" sequence="50"/>
+    <menuitem id="menu_account_mis_aged_receivable" name="Aged Receivable" parent="menu_account_mis_reports" action="action_syg_mis_aged_receivable" sequence="60"/>
+    <menuitem id="menu_account_mis_aged_payable" name="Aged Payable" parent="menu_account_mis_reports" action="action_syg_mis_aged_payable" sequence="70"/>
+    <menuitem id="menu_account_mis_tax" name="Tax Summary" parent="menu_account_mis_reports" action="action_syg_mis_tax" sequence="80"/>
+
+    <menuitem
+        id="menu_account_app_dashboard"
+        name="Sygmetiv Dashboard"
+        parent="account.menu_finance"
+        action="action_syg_accounting_dashboard"
+        sequence="1"
+        groups="account.group_account_readonly"/>
+</odoo>

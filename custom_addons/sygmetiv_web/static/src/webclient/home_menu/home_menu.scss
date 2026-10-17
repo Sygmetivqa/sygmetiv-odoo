@@ -1,0 +1,134 @@
+body.o_home_menu_background,
+.o_web_client.o_home_menu_background {
+    background-color: #e7e9ed;
+    background-image: url("/sygmetiv_web/static/img/home_menu_background.svg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+body.o_home_menu_background:not(.o_in_studio) .o_main_navbar {
+    background: transparent;
+    border-bottom-color: transparent;
+    color: $o-main-text-color;
+    --NavBar-entry-color: #{$o-main-text-color};
+    --NavBar-entry-color--hover: #{$o-black};
+    --NavBar-brand-color: #{$o-main-text-color};
+}
+
+.o_home_menu_background .o_action,
+.o_home_menu_background .o_action_manager {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100%;
+}
+
+.o_menu_toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 46px;
+    height: 100%;
+    padding: 0 0.75rem;
+    text-decoration: none;
+
+    &.o_menu_toggle_back .o_menu_toggle_icon {
+        transform: rotate(90deg);
+    }
+}
+
+.o_menu_brand_icon {
+    width: auto;
+    max-height: 2rem;
+    object-fit: contain;
+}
+
+.o_home_menu {
+    .o_home_menu_content {
+        width: 850px;
+        max-width: 100%;
+        margin: 3rem auto 2rem;
+        padding: 0 1rem;
+    }
+
+    .o_home_menu_search {
+        margin-bottom: 2rem;
+    }
+
+    .o_home_menu_search_input {
+        width: 28rem;
+        max-width: 100%;
+        border-radius: 2rem;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .o_apps {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        justify-items: center;
+        column-gap: 0.25rem;
+        row-gap: 1.75rem;
+    }
+
+    .o_app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 7.5rem;
+        color: inherit;
+        text-decoration: none;
+
+        .o_app_icon {
+            width: 70px;
+            height: 70px;
+            padding: 10px;
+            object-fit: cover;
+            background-color: #fff;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2),
+                0 1px 1px rgba(0, 0, 0, 0.02),
+                0 2px 2px rgba(0, 0, 0, 0.02),
+                0 4px 4px rgba(0, 0, 0, 0.02),
+                0 8px 8px rgba(0, 0, 0, 0.02),
+                0 16px 16px rgba(0, 0, 0, 0.02);
+            transition: box-shadow ease-in 0.1s, transform ease-in 0.1s;
+
+            i {
+                font-size: 2rem;
+            }
+        }
+
+        &:hover .o_app_icon,
+        &.o_focused .o_app_icon {
+            transform: translateY(-2px);
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2),
+                0 2px 2px rgba(0, 0, 0, 0.03),
+                0 4px 4px rgba(0, 0, 0, 0.03),
+                0 8px 8px rgba(0, 0, 0, 0.03),
+                0 12px 12px rgba(0, 0, 0, 0.03),
+                0 24px 24px rgba(0, 0, 0, 0.03);
+        }
+
+        .o_caption {
+            width: 100%;
+            margin-top: 0.5rem;
+            color: $o-main-text-color;
+            text-shadow: none;
+        }
+    }
+}
+
+@media (max-width: 767.98px) {
+    .o_home_menu .o_apps {
+        grid-template-columns: repeat(4, 1fr);
+        row-gap: 1.25rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .o_home_menu .o_apps {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

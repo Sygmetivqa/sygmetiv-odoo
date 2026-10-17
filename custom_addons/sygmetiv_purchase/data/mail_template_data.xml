@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_template_purchase_approval_request" model="mail.template">
+            <field name="name">Purchase: Approval Request</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">{{ object.company_id.name }} - RFQ to approve ({{ object.name }})</field>
+            <field name="email_from">{{ (object.user_id.email_formatted or object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>
+        RFQ <strong t-out="object.name or ''"/> for
+        <t t-out="object.partner_id.display_name or ''"/>
+        (<t t-out="format_amount(object.amount_total, object.currency_id) or ''"/>)
+        is waiting for your approval.
+    </p>
+    <p>
+        Requested by
+        <t t-out="object.approval_requested_by.display_name or object.env.user.display_name"/>.
+    </p>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/purchase.order/{{ object.id }}">Open RFQ</a>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_purchase_approval_done" model="mail.template">
+            <field name="name">Purchase: RFQ Approved</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">{{ object.company_id.name }} - Purchase order approved ({{ object.name }})</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>
+        RFQ <strong t-out="object.name or ''"/> has been approved by
+        <t t-out="object.approved_by.display_name or ''"/> and confirmed as a purchase order.
+    </p>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/purchase.order/{{ object.id }}">Open purchase order</a>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_purchase_approval_rejected" model="mail.template">
+            <field name="name">Purchase: RFQ Rejected</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">{{ object.company_id.name }} - RFQ rejected ({{ object.name }})</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Hello,</p>
+    <p>
+        RFQ <strong t-out="object.name or ''"/> was rejected and set back to RFQ.
+    </p>
+    <p>
+        <a t-attf-href="{{ object.get_base_url() }}/odoo/purchase.order/{{ object.id }}">Open RFQ</a>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

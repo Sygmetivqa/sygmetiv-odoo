@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_syg_accounting_dashboard,syg.accounting.dashboard.user,model_syg_accounting_dashboard,account.group_account_readonly,1,1,1,1
+access_syg_mis_report,syg.mis.report.user,model_syg_mis_report,account.group_account_readonly,1,1,1,1
+access_syg_mis_report_line,syg.mis.report.line.user,model_syg_mis_report_line,account.group_account_readonly,1,1,1,1
