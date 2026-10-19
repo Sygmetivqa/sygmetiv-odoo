@@ -91,9 +91,6 @@
     <record id="menu_syg_projects" model="ir.ui.menu">
         <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
     </record>
-    <record id="menu_syg_project_dashboard" model="ir.ui.menu">
-        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
-    </record>
 
     <menuitem
         id="menu_syg_project_dashboard"
@@ -102,6 +99,9 @@
         action="action_syg_project_dashboard"
         sequence="5"
         groups="sygmetiv_company_management.group_company_manager"/>
+    <record id="menu_syg_project_dashboard" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('group_company_manager')])]"/>
+    </record>
 
     <menuitem
         id="menu_syg_credential_app"
