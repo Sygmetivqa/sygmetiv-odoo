@@ -5,4 +5,9 @@
         <field name="comment">Can approve quotations before they are confirmed as sales orders.</field>
         <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
     </record>
+
+    <record id="group_crm_lead_notify" model="res.groups">
+        <field name="name">Lead Notification</field>
+        <field name="comment">Receives an Odoo popup when a lead is created, including leads that arrive from Facebook.</field>
+    </record>
 </odoo>

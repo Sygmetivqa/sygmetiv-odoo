@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sygmetiv Sales',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'category': 'Sales/Sales',
     'summary': 'Sygmetiv sales dashboard, quotation approval, CRM and sales reports',
     'license': 'LGPL-3',
