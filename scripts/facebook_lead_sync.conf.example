@@ -13,7 +13,7 @@ api_key =
 # Version shown in the Graph API Explorer dropdown, for example v25.0
 graph_version = v25.0
 page_id =
-# Leave form_id blank until --list-forms prints it.
+# Leave form_id blank when you use the [forms] section below.
 form_id =
 page_token =
 # Import leads submitted on or after this date.
@@ -22,5 +22,12 @@ since = 2026-10-20
 [lead]
 title_prefix = FB Demo –
 source_line = Source: Facebook Ads – HR software demo
-# Exact sales team name in Odoo. Leave blank to leave the team empty.
+# Team for every form that is not listed under [forms].
+# Use the exact name from CRM → Configuration → Sales Teams.
 sales_team =
+
+[forms]
+# Two forms go to one team. Repeat the team name on each line.
+# 111111111111111 = HR Demo Team
+# 222222222222222 = HR Demo Team
+# Every other form on the Page uses sales_team above.

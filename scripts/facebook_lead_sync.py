@@ -40,7 +40,7 @@ class SyncError(Exception):
 
 
 def load_config(path):
-    parser = configparser.ConfigParser()
+    parser = configparser.ConfigParser(interpolation=None)
     read = parser.read(path)
     if not read:
         raise SyncError("Config file not found: %s" % path)
@@ -95,11 +95,34 @@ def list_forms(config):
     return forms
 
 
-def fetch_leads(config, since_epoch):
+def explicit_routes(config):
+    if not config.has_section("forms"):
+        return {}
+    routes = {}
+    for form_id, team_name in config.items("forms"):
+        form_id = str(form_id).strip()
+        if form_id:
+            routes[form_id] = team_name.strip()
+    return routes
+
+
+def assignments_from(explicit, page_form_ids, single_form_id, default_team):
+    """Map each form id to a sales team name. An empty name leaves the team blank."""
+    if explicit:
+        assigned = dict(explicit)
+        if default_team:
+            for form_id in page_form_ids:
+                form_id = str(form_id or "").strip()
+                if form_id:
+                    assigned.setdefault(form_id, default_team)
+        return assigned
+    if single_form_id:
+        return {single_form_id: default_team}
+    raise SyncError("No forms configured. Add a [forms] section, or set [facebook] form_id.")
+
+
+def fetch_leads(config, since_epoch, form_id):
     facebook = config["facebook"]
-    form_id = facebook.get("form_id", "").strip()
-    if not form_id:
-        raise SyncError("Config [facebook] form_id is empty. Run --list-forms and paste the form id.")
     filtering = json.dumps([{"field": "time_created", "operator": "GREATER_THAN", "value": int(since_epoch)}])
     url = graph_url(
         facebook["graph_version"],
@@ -141,7 +164,7 @@ def contact_name(values):
     return joined
 
 
-def build_lead(values, lead_id, created_time, title_prefix, source_line):
+def build_lead(values, lead_id, created_time, title_prefix, source_line, form_label):
     name = contact_name(values) or "Facebook lead"
     prefix = (title_prefix or "").strip()
     title = "%s %s" % (prefix, name) if prefix else name
@@ -150,6 +173,8 @@ def build_lead(values, lead_id, created_time, title_prefix, source_line):
     company = first_of(values, COMPANY_KEYS)
     used = set(NAME_KEYS + FIRST_KEYS + LAST_KEYS + EMAIL_KEYS + PHONE_KEYS + COMPANY_KEYS)
     notes = [source_line.strip(), "Facebook lead id: %s" % lead_id]
+    if form_label:
+        notes.append("Facebook form: %s" % form_label)
     if created_time:
         notes.append("Submitted: %s" % created_time)
     if company:
@@ -275,42 +300,71 @@ class RunLock:
             self.path.unlink()
 
 
+def form_assignments(config):
+    explicit = explicit_routes(config)
+    default_team = config.get("lead", "sales_team", fallback="").strip()
+    single_form_id = config.get("facebook", "form_id", fallback="").strip()
+    page_forms = []
+    if explicit and default_team:
+        page_forms = list_forms(config)
+    names = {str(form.get("id")): form.get("name") or "" for form in page_forms}
+    assigned = assignments_from(
+        explicit,
+        [form.get("id") for form in page_forms],
+        single_form_id,
+        default_team,
+    )
+    return assigned, names
+
+
 def run(config, config_path, dry_run):
     state_path = config_path.with_name(STATE_NAME)
     state = load_state(state_path)
     seen = set(str(item) for item in state.get("seen_ids") or [])
-    leads = fetch_leads(config, since_epoch(config, state))
+    assigned, form_names = form_assignments(config)
     database, uid, api_key, models = connect_odoo(config)
-    team_id = find_team_id(models, database, uid, api_key, config.get("lead", "sales_team", fallback="").strip())
+    team_ids = {}
+    for team_name in sorted(set(assigned.values())):
+        team_ids[team_name] = find_team_id(models, database, uid, api_key, team_name)
+    for form_id, team_name in sorted(assigned.items()):
+        print("Form %s -> %s" % (form_id, team_name or "(no sales team)"))
+    since = since_epoch(config, state)
     created = 0
-    for item in leads:
-        lead_id = str(item.get("id") or "").strip()
-        if not lead_id or lead_id in seen:
-            continue
-        if already_imported(models, database, uid, api_key, lead_id):
+    returned = 0
+    for form_id, team_name in sorted(assigned.items()):
+        leads = fetch_leads(config, since, form_id)
+        returned += len(leads)
+        team_id = team_ids[team_name]
+        form_label = form_names.get(form_id) or form_id
+        for item in leads:
+            lead_id = str(item.get("id") or "").strip()
+            if not lead_id or lead_id in seen:
+                continue
+            if already_imported(models, database, uid, api_key, lead_id):
+                seen.add(lead_id)
+                continue
+            values = build_lead(
+                field_map(item.get("field_data")),
+                lead_id,
+                item.get("created_time") or "",
+                config.get("lead", "title_prefix"),
+                config.get("lead", "source_line"),
+                form_label,
+            )
+            if team_id:
+                values["team_id"] = team_id
+            if dry_run:
+                print("Would create: %s | %s" % (values["name"], team_name or "(no sales team)"))
+                continue
+            models.execute_kw(database, uid, api_key, "crm.lead", "create", [values])
             seen.add(lead_id)
-            continue
-        values = build_lead(
-            field_map(item.get("field_data")),
-            lead_id,
-            item.get("created_time") or "",
-            config.get("lead", "title_prefix"),
-            config.get("lead", "source_line"),
-        )
-        if team_id:
-            values["team_id"] = team_id
-        if dry_run:
-            print("Would create: %s <%s> %s" % (values["name"], values.get("email_from", ""), values.get("phone", "")))
-            continue
-        models.execute_kw(database, uid, api_key, "crm.lead", "create", [values])
-        seen.add(lead_id)
-        created += 1
-        print("Created: %s (Facebook lead id %s)" % (values["name"], lead_id))
+            created += 1
+            print("Created: %s | %s (Facebook lead id %s)" % (values["name"], team_name or "(no sales team)", lead_id))
     if not dry_run:
         state["seen_ids"] = sorted(seen)
         state["last_success_epoch"] = int(time.time())
         save_state(state_path, state)
-    print("%s lead(s). Meta returned %s row(s) in this window." % ("Would create" if dry_run else "Created", len(leads)))
+    print("%s lead(s). Meta returned %s row(s) in this window." % ("Would create" if dry_run else "Created", returned))
     return created
 
 
