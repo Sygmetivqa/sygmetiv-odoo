@@ -107,18 +107,23 @@ def explicit_routes(config):
 
 
 def assignments_from(explicit, page_form_ids, single_form_id, default_team):
-    """Map each form id to a sales team name. An empty name leaves the team blank."""
-    if explicit:
-        assigned = dict(explicit)
-        if default_team:
-            for form_id in page_form_ids:
-                form_id = str(form_id or "").strip()
-                if form_id:
-                    assigned.setdefault(form_id, default_team)
-        return assigned
-    if single_form_id:
+    """Map each form id to a sales team name. An empty name leaves the team blank.
+
+    A blank form_id means every form on the Page, including forms created later.
+    [forms] overrides the team for those ids. sales_team is the team for the rest.
+    """
+    if single_form_id and not page_form_ids:
         return {single_form_id: default_team}
-    raise SyncError("No forms configured. Add a [forms] section, or set [facebook] form_id.")
+    assigned = {}
+    for form_id in page_form_ids:
+        form_id = str(form_id or "").strip()
+        if form_id:
+            assigned[form_id] = explicit.get(form_id, default_team)
+    for form_id, team_name in explicit.items():
+        assigned.setdefault(form_id, team_name)
+    if not assigned:
+        raise SyncError("Meta returned no Instant Forms for this Page.")
+    return assigned
 
 
 def fetch_leads(config, since_epoch, form_id):
@@ -305,7 +310,7 @@ def form_assignments(config):
     default_team = config.get("lead", "sales_team", fallback="").strip()
     single_form_id = config.get("facebook", "form_id", fallback="").strip()
     page_forms = []
-    if explicit and default_team:
+    if not single_form_id or explicit:
         page_forms = list_forms(config)
     names = {str(form.get("id")): form.get("name") or "" for form in page_forms}
     assigned = assignments_from(

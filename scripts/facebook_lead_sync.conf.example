@@ -13,7 +13,7 @@ api_key =
 # Version shown in the Graph API Explorer dropdown, for example v25.0
 graph_version = v25.0
 page_id =
-# Leave form_id blank when you use the [forms] section below.
+# Leave form_id blank. Every form on the Page is fetched, including a form created later.
 form_id =
 page_token =
 # Import leads submitted on or after this date.
@@ -22,7 +22,7 @@ since = 2026-10-20
 [lead]
 title_prefix = FB Demo –
 source_line = Source: Facebook Ads – HR software demo
-# Team for every form that is not listed under [forms].
+# Team for every form that is not listed under [forms], including new forms.
 # Use the exact name from CRM → Configuration → Sales Teams.
 sales_team =
 
