@@ -1,0 +1,26 @@
+# Copy this file to facebook_lead_sync.conf on the Oracle server.
+# Fill the blanks there. Do not commit the filled file. Do not email it.
+
+[odoo]
+# Address that works on the server itself. This is usually local.
+url = http://127.0.0.1:8069
+database =
+username =
+# Odoo API key. This is not the login password.
+api_key =
+
+[facebook]
+# Version shown in the Graph API Explorer dropdown, for example v25.0
+graph_version = v25.0
+page_id =
+# Leave form_id blank until --list-forms prints it.
+form_id =
+page_token =
+# Import leads submitted on or after this date.
+since = 2026-10-20
+
+[lead]
+title_prefix = FB Demo –
+source_line = Source: Facebook Ads – HR software demo
+# Exact sales team name in Odoo. Leave blank to leave the team empty.
+sales_team =
