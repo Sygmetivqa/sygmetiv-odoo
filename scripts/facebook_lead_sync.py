@@ -128,12 +128,14 @@ def assignments_from(explicit, page_form_ids, single_form_id, default_team):
 
 def fetch_leads(config, since_epoch, form_id):
     facebook = config["facebook"]
-    filtering = json.dumps([{"field": "time_created", "operator": "GREATER_THAN", "value": int(since_epoch)}])
+    query = {"limit": 100}
+    if since_epoch is not None:
+        query["filtering"] = json.dumps([{"field": "time_created", "operator": "GREATER_THAN", "value": int(since_epoch)}])
     url = graph_url(
         facebook["graph_version"],
         "%s/leads" % form_id,
         facebook["page_token"].strip(),
-        {"limit": 100, "filtering": filtering},
+        query,
     )
     leads = []
     while url:
@@ -260,17 +262,12 @@ def save_state(path, state):
 def since_epoch(config, state):
     raw = config.get("facebook", "since", fallback="").strip()
     if not raw:
-        raise SyncError("Config [facebook] since is empty. Use a date, for example 2026-10-20.")
+        return None
     try:
         parsed = time.strptime(raw, "%Y-%m-%d")
     except ValueError as error:
-        raise SyncError("Config [facebook] since must be YYYY-MM-DD.") from error
-    configured = int(calendar.timegm(parsed))
-    previous = int(state.get("last_success_epoch") or 0)
-    # One day of overlap. The Facebook lead id stops a second copy.
-    if previous:
-        return max(configured, previous - 86400)
-    return configured
+        raise SyncError("Config [facebook] since must be YYYY-MM-DD, or blank to import every lead.") from error
+    return int(calendar.timegm(parsed))
 
 
 class RunLock:

@@ -15,16 +15,16 @@ graph_version = v26.0
 page_id = 967880653078908
 # Leave form_id blank. Every form on the Page is fetched, including a form created later.
 form_id =
-page_token = EAASwBr71ne4BSwZBpvSIH2j4NihSnAUakkXNJhWgFLJXtfRgXo6Qwg1NevSvuM6cT86AVLJILNZCUhhaf7HQ8QWbYHQDjVferYr8ZBiy4HZC0C5E8G7rTXvupn5Id8Hhakm6wO8idocCnS39pgZC6VHCijhZCC5VqZCgRusO0
-# Import leads submitted on or after this date.
-since = 2026-10-20
+page_token =EAASwBr71ne4BSZCUCGUfVZB7s9Eqj3zn5kwisgYjj84YX2aoBuWoFqkDl2OWeAMut0JaPKxxX1Roml43Cc7ZCfpEy13lZAI1A1bIxp1rJSAfV7bRuD4sBq0h075rCLR8Vj9nUPgTtMy1oxHT9KV70rHw4ZAiypqtJO450B2wZC9JqnpPTxqlkplJJK6TvgUlsCqwZDZD
+# Leave blank to import every lead Facebook still has (about 90 days).
+since =
 
 [lead]
 title_prefix = FB Demo –
 source_line = Source: Facebook Ads – HR software demo
 # Team for every form that is not listed under [forms], including new forms.
 # Use the exact name from CRM → Configuration → Sales Teams.
-sales_team =
+sales_team =Sales
 
 [forms]
 # Two forms go to one team. Repeat the team name on each line.
