@@ -3,19 +3,19 @@
 
 [odoo]
 # Address that works on the server itself. This is usually local.
-url = http://127.0.0.1:8069
-database =
-username =
+url = http://193.123.76.128
+database = sygmetiv_db
+username = admin
 # Odoo API key. This is not the login password.
-api_key =
+api_key = 2934c2d428032237e6181637dde44a4725919764
 
 [facebook]
 # Version shown in the Graph API Explorer dropdown, for example v25.0
-graph_version = v25.0
-page_id =
+graph_version = v26.0
+page_id = 967880653078908
 # Leave form_id blank. Every form on the Page is fetched, including a form created later.
 form_id =
-page_token =
+page_token = EAASwBr71ne4BSwZBpvSIH2j4NihSnAUakkXNJhWgFLJXtfRgXo6Qwg1NevSvuM6cT86AVLJILNZCUhhaf7HQ8QWbYHQDjVferYr8ZBiy4HZC0C5E8G7rTXvupn5Id8Hhakm6wO8idocCnS39pgZC6VHCijhZCC5VqZCgRusO0
 # Import leads submitted on or after this date.
 since = 2026-10-20
 
