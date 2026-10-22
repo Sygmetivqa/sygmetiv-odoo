@@ -26,23 +26,27 @@
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[@name='check_in_group']" position="after">
-                <group string="Geofence" name="syg_in_geofence">
-                    <field name="syg_in_geofence_state" widget="badge"
-                        decoration-success="syg_in_geofence_state == 'inside'"
-                        decoration-danger="syg_in_geofence_state == 'outside'"
-                        decoration-warning="syg_in_geofence_state == 'missing'"/>
-                    <field name="syg_in_geofence_id"/>
-                    <field name="syg_in_distance"/>
+                <group string="Geofence" name="syg_in_geofence" colspan="2">
+                    <group>
+                        <field name="syg_in_geofence_state" widget="badge"
+                            decoration-success="syg_in_geofence_state == 'inside'"
+                            decoration-danger="syg_in_geofence_state == 'outside'"
+                            decoration-warning="syg_in_geofence_state == 'missing'"/>
+                        <field name="syg_in_geofence_id"/>
+                        <field name="syg_in_distance"/>
+                    </group>
                 </group>
             </xpath>
-            <xpath expr="//group[@name='check_out_group']" position="inside">
-                <group string="Geofence" name="syg_out_geofence">
-                    <field name="syg_out_geofence_state" widget="badge"
-                        decoration-success="syg_out_geofence_state == 'inside'"
-                        decoration-danger="syg_out_geofence_state == 'outside'"
-                        decoration-warning="syg_out_geofence_state == 'missing'"/>
-                    <field name="syg_out_geofence_id"/>
-                    <field name="syg_out_distance"/>
+            <xpath expr="//group[@name='check_out_group']" position="after">
+                <group string="Geofence" name="syg_out_geofence" colspan="2" invisible="not check_out">
+                    <group>
+                        <field name="syg_out_geofence_state" widget="badge"
+                            decoration-success="syg_out_geofence_state == 'inside'"
+                            decoration-danger="syg_out_geofence_state == 'outside'"
+                            decoration-warning="syg_out_geofence_state == 'missing'"/>
+                        <field name="syg_out_geofence_id"/>
+                        <field name="syg_out_distance"/>
+                    </group>
                 </group>
             </xpath>
         </field>
