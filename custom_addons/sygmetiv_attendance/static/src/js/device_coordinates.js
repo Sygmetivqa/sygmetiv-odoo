@@ -18,6 +18,18 @@ function readPosition(options) {
     });
 }
 
+export function locationBlockReason() {
+    // Chrome and Firefox never show Allow/Block on plain http, except
+    // localhost and 127.0.0.1. The site setting stays disabled.
+    if (!window.isSecureContext) {
+        return "insecure";
+    }
+    if (isIosApp() || !navigator.geolocation) {
+        return "unavailable";
+    }
+    return null;
+}
+
 async function permissionState() {
     if (!navigator.permissions || !navigator.permissions.query) {
         return "prompt";
@@ -35,13 +47,12 @@ async function permissionState() {
  * failed precise reading is followed by a network fix. 0,0 is discarded.
  */
 export async function getDeviceCoordinates() {
-    if (isIosApp() || !navigator.geolocation) {
+    if (locationBlockReason()) {
         return null;
     }
     const permission = await permissionState();
-    if (permission === "denied") {
-        return null;
-    }
+    // A previous Block does not show the dialog again. Ask anyway when the
+    // browser still says it will prompt.
     const attempts = permission === "granted"
         ? [ACCURATE_FIX, COARSE_FIX]
         : [PERMISSION_PROMPT, COARSE_FIX];
