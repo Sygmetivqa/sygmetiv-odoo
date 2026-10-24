@@ -60,6 +60,22 @@ def remove_obsolete_dashboard_groups(env):
             rec.unlink()
 
 
+def ensure_role_types(env):
+    role_type = env['syg.role.type'].sudo()
+    defaults = (
+        ('Attendee', False),
+        ('Presenter', True),
+    )
+    for name, requires_presentation in defaults:
+        matches = role_type.with_context(lang='en_US').search([('name', '=ilike', name)])
+        if matches:
+            continue
+        role_type.create({
+            'name': name,
+            'requires_presentation': requires_presentation,
+        })
+
+
 def ensure_meeting_task_types(env):
     task_type = env['syg.task.type'].sudo()
     for name in ('Demo', 'Training', 'Meeting'):
@@ -75,3 +91,4 @@ def post_init_hook(env):
     remove_legacy_dashboard_menus(env)
     remove_obsolete_dashboard_groups(env)
     ensure_meeting_task_types(env)
+    ensure_role_types(env)

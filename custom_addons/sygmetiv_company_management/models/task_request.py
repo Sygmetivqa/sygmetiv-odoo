@@ -74,7 +74,7 @@ class SygTaskRequest(models.Model):
         if self.syg_task_type_id.is_meeting and self.employee_id and not self.syg_attendee_ids:
             self.syg_attendee_ids = self.employee_id
 
-    @api.constrains('syg_task_type_id', 'syg_attendee_ids', 'syg_role', 'syg_presentation_time')
+    @api.constrains('syg_task_type_id', 'syg_attendee_ids', 'syg_role_type_id')
     def _check_syg_meeting_details(self):
         self._check_syg_meeting_values()
 
@@ -128,7 +128,7 @@ class SygTaskRequest(models.Model):
                 'date_deadline': rec.deadline or rec.planned_date,
                 'syg_task_type_id': rec.syg_task_type_id.id,
                 'syg_attendee_ids': [Command.set(rec.syg_attendee_ids.ids)],
-                'syg_role': rec.syg_role,
+                'syg_role_type_id': rec.syg_role_type_id.id,
                 'syg_presentation_time': rec.syg_presentation_time,
                 'partner_id': rec.partner_id.id,
                 'syg_vendor_id': rec.vendor_id.id,

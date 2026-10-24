@@ -14,6 +14,6 @@ class SygTaskType(models.Model):
     active = fields.Boolean(default=True)
     is_meeting = fields.Boolean(
         string="Meeting related",
-        help="Demo, training and meeting types require attendees, a role in the task, and a presentation time.",
+        help="Demo, training and meeting types require attendees and a role type. Presentation time is optional and only for presenter roles.",
     )
     description = fields.Text()

@@ -315,6 +315,13 @@
         sequence="20"/>
 
     <menuitem
+        id="menu_syg_role_type"
+        name="Role Types"
+        parent="menu_syg_config"
+        action="action_syg_role_type"
+        sequence="21"/>
+
+    <menuitem
         id="menu_syg_attendance_geofence"
         name="Attendance Locations"
         parent="menu_syg_config"
@@ -344,6 +351,14 @@
         parent="project.menu_project_config"
         action="action_syg_task_type"
         sequence="25"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_project_role_type"
+        name="Role Types"
+        parent="project.menu_project_config"
+        action="action_syg_role_type"
+        sequence="26"
         groups="sygmetiv_company_management.group_company_manager"/>
 
     <menuitem

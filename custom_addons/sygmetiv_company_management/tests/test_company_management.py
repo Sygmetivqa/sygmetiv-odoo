@@ -63,10 +63,12 @@ class TestCompanyManagement(TransactionCase):
         self.assertEqual(action['domain'], [('project_id', '=', project.id)])
         self.assertEqual(project.syg_credential_count, 1)
 
-    def test_meeting_task_requires_attendees_role_and_presentation_time(self):
+    def test_meeting_task_requires_attendees_and_role_type(self):
         project = self.env['project.project'].create({'name': 'Meeting Project'})
         meeting = self.env['syg.task.type'].create({'name': 'Client Demo', 'is_meeting': True})
         regular = self.env['syg.task.type'].create({'name': 'Development Work', 'is_meeting': False})
+        attendee = self.env['syg.role.type'].create({'name': 'Listener', 'requires_presentation': False})
+        presenter = self.env['syg.role.type'].create({'name': 'Trainer', 'requires_presentation': True})
         self.env['project.task'].create({
             'name': 'Build feature',
             'project_id': project.id,
@@ -79,20 +81,30 @@ class TestCompanyManagement(TransactionCase):
                 'project_id': project.id,
                 'syg_task_type_id': meeting.id,
             })
+        attending = self.env['project.task'].create({
+            'name': 'Sit in on the demo',
+            'project_id': project.id,
+            'syg_task_type_id': meeting.id,
+            'syg_attendee_ids': [Command.set(employee.ids)],
+            'syg_role_type_id': attendee.id,
+            'syg_presentation_time': 2.0,
+        })
+        self.assertEqual(attending.syg_presentation_time, 0.0)
         request = self.env['syg.task.request'].create({
             'name': 'Training session',
             'employee_id': employee.id,
             'project_id': project.id,
             'syg_task_type_id': meeting.id,
             'syg_attendee_ids': [Command.set(employee.ids)],
-            'syg_role': 'Trainer',
-            'syg_presentation_time': 1.0,
+            'syg_role_type_id': presenter.id,
             'description': '<p>Agenda for the session</p>',
         })
+        self.assertFalse(request.syg_presentation_time)
+        request.syg_presentation_time = 1.0
         request.action_submit()
         request.action_create_task()
         task = request.task_id
-        self.assertEqual(task.syg_role, 'Trainer')
+        self.assertEqual(task.syg_role_type_id, presenter)
         self.assertEqual(task.syg_attendee_ids, employee)
         self.assertEqual(task.syg_presentation_time, 1.0)
         self.assertIn('Agenda', task.description or '')

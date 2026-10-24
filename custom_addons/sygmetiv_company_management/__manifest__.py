@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sygmetiv Company Management',
-    'version': '19.0.1.44.0',
+    'version': '19.0.1.46.0',
     'category': 'Human Resources',
     'summary': 'Employee dashboard, projects, timesheets, overtime, payroll and performance',
     'description': """
@@ -50,6 +50,7 @@ Unifies day-to-day company operations:
         'views/task_views.xml',
         'views/task_request_views.xml',
         'views/task_type_views.xml',
+        'views/role_type_views.xml',
         'views/overtime_views.xml',
         'views/payslip_views.xml',
         'views/performance_views.xml',

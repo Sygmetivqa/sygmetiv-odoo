@@ -29,7 +29,7 @@ class ProjectTask(models.Model):
     )
     syg_task_request_name = fields.Char(related='syg_task_request_id.display_name', string="Task Request")
 
-    @api.constrains('syg_task_type_id', 'syg_attendee_ids', 'syg_role', 'syg_presentation_time')
+    @api.constrains('syg_task_type_id', 'syg_attendee_ids', 'syg_role_type_id')
     def _check_syg_meeting_details(self):
         self._check_syg_meeting_values()
 

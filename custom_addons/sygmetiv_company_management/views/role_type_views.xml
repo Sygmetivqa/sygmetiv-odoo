@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_role_type_list" model="ir.ui.view">
+        <field name="name">syg.role.type.list</field>
+        <field name="model">syg.role.type</field>
+        <field name="arch" type="xml">
+            <list string="Role Types" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="requires_presentation"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_role_type_form" model="ir.ui.view">
+        <field name="name">syg.role.type.form</field>
+        <field name="model">syg.role.type</field>
+        <field name="arch" type="xml">
+            <form string="Role Type">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="requires_presentation"/>
+                        <field name="active"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_role_type" model="ir.actions.act_window">
+        <field name="name">Role Types</field>
+        <field name="res_model">syg.role.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a role type</p>
+            <p>Use Attendee for people who only attend. Tick Presenter when that role can record a presentation time.</p>
+        </field>
+    </record>
+</odoo>

@@ -24,6 +24,9 @@ access_syg_task_request_employee,syg.task.request.employee,model_syg_task_reques
 access_syg_task_request_manager,syg.task.request.manager,model_syg_task_request,sygmetiv_company_management.group_company_manager,1,1,1,1
 access_syg_task_type_user,syg.task.type.user,model_syg_task_type,sygmetiv_company_management.group_company_user,1,0,0,0
 access_syg_task_type_manager,syg.task.type.manager,model_syg_task_type,sygmetiv_company_management.group_company_manager,1,1,1,1
+access_syg_role_type_user,syg.role.type.user,model_syg_role_type,sygmetiv_company_management.group_company_user,1,0,0,0
+access_syg_role_type_manager,syg.role.type.manager,model_syg_role_type,sygmetiv_company_management.group_company_manager,1,1,1,1
+access_syg_role_type_project,syg.role.type.project,model_syg_role_type,project.group_project_user,1,0,0,0
 access_syg_live_item_user,syg.live.checklist.item.user,model_syg_live_checklist_item,project.group_project_user,1,0,0,0
 access_syg_live_item_manager,syg.live.checklist.item.manager,model_syg_live_checklist_item,project.group_project_manager,1,1,1,1
 access_syg_live_check_user,syg.project.live.check.user,model_syg_project_live_check,project.group_project_user,1,1,1,0
