@@ -83,14 +83,14 @@
                                     </div>
                                     <div class="o_syg_kpi_value"><field name="d_task_requests_pending" nolabel="1" readonly="1"/></div>
                                 </button>
-                                <button name="action_overtime_to_approve" type="object" class="o_syg_kpi_card o_syg_accent_amber">
+                                <button name="action_overtime_to_approve" type="object" class="o_syg_kpi_card o_syg_accent_amber" groups="sygmetiv_attendance.group_syg_overtime">
                                     <div class="o_syg_kpi_top">
                                         <span class="o_syg_kpi_icon"><i class="fa fa-hourglass-half"/></span>
                                         <span class="o_syg_kpi_label">Overtime to Approve</span>
                                     </div>
                                     <div class="o_syg_kpi_value"><field name="d_ot_approve" nolabel="1" readonly="1"/></div>
                                 </button>
-                                <div class="o_syg_kpi_card o_syg_accent_rose o_syg_kpi_static">
+                                <div class="o_syg_kpi_card o_syg_accent_rose o_syg_kpi_static" groups="sygmetiv_attendance.group_syg_overtime">
                                     <div class="o_syg_kpi_top">
                                         <span class="o_syg_kpi_icon"><i class="fa fa-clock-o"/></span>
                                         <span class="o_syg_kpi_label">Approved Overtime</span>
@@ -222,7 +222,7 @@
                                     <div class="o_syg_kpi_label">Timesheet hours by department</div>
                                     <field name="graph_timesheet" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
                                 </div>
-                                <div class="o_syg_chart_card">
+                                <div class="o_syg_chart_card" groups="sygmetiv_attendance.group_syg_overtime">
                                     <div class="o_syg_kpi_label">Approved overtime this period</div>
                                     <field name="graph_overtime" widget="syg_dashboard_graph" options="{'graph_type': 'line'}" nolabel="1"/>
                                 </div>
@@ -343,7 +343,7 @@
                                     </div>
                                     <div class="o_syg_kpi_value"><field name="d_timesheet" nolabel="1" readonly="1"/></div>
                                 </button>
-                                <button name="action_my_overtime" type="object" class="o_syg_kpi_card o_syg_accent_amber">
+                                <button name="action_my_overtime" type="object" class="o_syg_kpi_card o_syg_accent_amber" groups="sygmetiv_attendance.group_syg_overtime">
                                     <div class="o_syg_kpi_top">
                                         <span class="o_syg_kpi_icon"><i class="fa fa-plus"/></span>
                                         <span class="o_syg_kpi_label">Overtime Hours</span>
@@ -424,7 +424,7 @@
                                     <div class="o_syg_kpi_label">Time snapshot</div>
                                     <field name="graph_my_activity" widget="syg_dashboard_graph" options="{'graph_type': 'bar'}" nolabel="1"/>
                                 </div>
-                                <div class="o_syg_chart_card">
+                                <div class="o_syg_chart_card" groups="sygmetiv_attendance.group_syg_overtime">
                                     <div class="o_syg_kpi_label">Approved overtime</div>
                                     <field name="graph_my_overtime" widget="syg_dashboard_graph" options="{'graph_type': 'line'}" nolabel="1"/>
                                 </div>

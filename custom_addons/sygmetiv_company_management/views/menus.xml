@@ -180,8 +180,14 @@
         name="Overtime to Approve"
         parent="menu_syg_time"
         action="action_syg_overtime_to_approve"
-        sequence="50"
-        groups="sygmetiv_company_management.group_company_manager"/>
+        sequence="50"/>
+
+    <record id="menu_syg_overtime" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('sygmetiv_attendance.group_syg_overtime')])]"/>
+    </record>
+    <record id="menu_syg_overtime_approve" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('sygmetiv_attendance.group_syg_overtime')])]"/>
+    </record>
 
     <menuitem
         id="menu_syg_performance_app"

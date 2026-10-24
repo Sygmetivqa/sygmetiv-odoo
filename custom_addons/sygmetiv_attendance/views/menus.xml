@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="hr_attendance.menu_hr_attendance_overtime_rulesets" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        <field name="group_ids" eval="[(6, 0, [ref('group_syg_overtime')])]"/>
+    </record>
+
     <menuitem
         id="menu_syg_attendance_geofence"
         name="Attendance Locations"

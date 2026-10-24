@@ -5,6 +5,21 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
         <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_approve_overtime']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_refuse_overtime']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='validated_overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='overtime_status']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
             <xpath expr="//field[@name='worked_hours']" position="after">
                 <field name="syg_in_geofence_state" optional="show" widget="badge"
                     decoration-success="syg_in_geofence_state == 'inside'"
@@ -25,6 +40,65 @@
         <field name="model">hr.attendance</field>
         <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='overtime_status']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//label[@for='validated_overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='validated_overtime_hours']/parent::div" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_in_attendance_maps']/parent::div" position="replace">
+                <div>
+                    <field name="syg_in_has_gps" invisible="1"/>
+                    <div class="o_row" invisible="not syg_in_has_gps">
+                        <span>
+                            <field name="in_latitude"/>
+                        </span>,
+                        <span>
+                            <field name="in_longitude" nolabel="1"/>
+                        </span>
+                    </div>
+                    <span invisible="syg_in_has_gps">No GPS</span>
+                    <button
+                        name="action_in_attendance_maps"
+                        type="object"
+                        class="btn btn-link ps-0 pt-0 pb-2"
+                        icon="oi-arrow-right"
+                        string="View on Maps"
+                        invisible="not syg_in_has_gps"
+                        colspan="2"/>
+                </div>
+            </xpath>
+            <xpath expr="//button[@name='action_out_attendance_maps']/parent::div" position="replace">
+                <div>
+                    <field name="syg_out_has_gps" invisible="1"/>
+                    <div class="o_row" invisible="not syg_out_has_gps">
+                        <span>
+                            <field name="out_latitude"/>
+                        </span>,
+                        <span>
+                            <field name="out_longitude" nolabel="1"/>
+                        </span>
+                    </div>
+                    <span invisible="syg_out_has_gps">No GPS</span>
+                    <button
+                        name="action_out_attendance_maps"
+                        type="object"
+                        class="btn btn-link ps-0 pt-0 pb-2"
+                        icon="oi-arrow-right"
+                        string="View on Maps"
+                        invisible="not syg_out_has_gps"
+                        colspan="2"/>
+                </div>
+            </xpath>
             <xpath expr="//group[@name='check_in_group']" position="after">
                 <group string="Geofence" name="syg_in_geofence" colspan="2">
                     <group>
@@ -60,6 +134,88 @@
             <xpath expr="//filter[@name='errors']" position="after">
                 <filter string="Outside geofence" name="syg_outside"
                     domain="['|', ('syg_in_geofence_state', '=', 'outside'), ('syg_out_geofence_state', '=', 'outside')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_management_view_filter_syg" model="ir.ui.view">
+        <field name="name">hr.attendance.search.syg.hide.overtime</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_management_view_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='to_approve']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='approved']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='refused']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_attendance_tree_management_syg" model="ir.ui.view">
+        <field name="name">hr.attendance.list.syg.hide.overtime</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree_management"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_approve_overtime']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_refuse_overtime']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//list/button[@name='action_approve_overtime']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//list/button[@name='action_refuse_overtime']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='validated_overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_employee_simple_tree_syg" model="ir.ui.view">
+        <field name="name">hr.attendance.list.syg.employee.hide.overtime</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_employee_simple_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='validated_overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='overtime_status']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_graph_syg" model="ir.ui.view">
+        <field name="name">hr.attendance.graph.syg.hide.overtime</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_graph"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_view_pivot_syg" model="ir.ui.view">
+        <field name="name">hr.attendance.pivot.syg.hide.overtime</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_pivot"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='validated_overtime_hours']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
             </xpath>
         </field>
     </record>

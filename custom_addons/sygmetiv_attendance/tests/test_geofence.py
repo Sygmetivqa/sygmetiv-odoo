@@ -26,6 +26,31 @@ class TestAttendanceGeofence(TransactionCase):
         self.assertLess(distance, 200)
         self.assertGreater(distance, 50)
 
+    def test_zero_coordinates_are_not_a_gps_fix(self):
+        attendance = self.env['hr.attendance'].create({
+            'employee_id': self.employee.id,
+            'in_mode': 'kiosk',
+            'in_latitude': 0.0,
+            'in_longitude': 0.0,
+        })
+        self.assertFalse(attendance.syg_in_has_gps)
+        self.assertEqual(attendance.syg_in_geofence_state, 'missing')
+        with self.assertRaises(UserError):
+            attendance.action_in_attendance_maps()
+
+    def test_maps_link_uses_the_recorded_fix(self):
+        attendance = self.env['hr.attendance'].create({
+            'employee_id': self.employee.id,
+            'in_mode': 'kiosk',
+            'in_latitude': 25.286000,
+            'in_longitude': 51.531040,
+        })
+        self.assertTrue(attendance.syg_in_has_gps)
+        action = attendance.action_in_attendance_maps()
+        self.assertIn('maps.google.com', action['url'])
+        self.assertIn('25.28', action['url'])
+        self.assertIn('51.53', action['url'])
+
     def test_check_in_inside_location(self):
         attendance = self.env['hr.attendance'].create({
             'employee_id': self.employee.id,

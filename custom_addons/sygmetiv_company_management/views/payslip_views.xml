@@ -51,10 +51,10 @@
                         <group>
                             <field name="wage"/>
                             <field name="timesheet_hours"/>
-                            <field name="overtime_hours"/>
+                            <field name="overtime_hours" groups="sygmetiv_attendance.group_syg_overtime"/>
                         </group>
                         <group>
-                            <field name="overtime_amount"/>
+                            <field name="overtime_amount" groups="sygmetiv_attendance.group_syg_overtime"/>
                             <field name="allowance_amount"/>
                             <field name="deduction_amount"/>
                             <field name="net_amount"/>

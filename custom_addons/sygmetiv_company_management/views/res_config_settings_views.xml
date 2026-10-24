@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//app[@name='hr']" position="inside">
                 <block title="Community Payroll" name="syg_payroll_settings">
-                    <setting string="Overtime multiplier" help="Hourly overtime = (monthly wage / monthly hours) × multiplier.">
+                    <setting string="Overtime multiplier" groups="sygmetiv_attendance.group_syg_overtime" help="Hourly overtime = (monthly wage / monthly hours) × multiplier.">
                         <field name="syg_overtime_multiplier"/>
                     </setting>
                     <setting string="Standard monthly hours" help="Hours used to convert monthly wage to an hourly rate.">

@@ -56,6 +56,40 @@ class HrAttendance(models.Model):
         copy=False,
         index=True,
     )
+    syg_in_has_gps = fields.Boolean(
+        string="Check-in has GPS",
+        compute='_compute_syg_has_gps',
+    )
+    syg_out_has_gps = fields.Boolean(
+        string="Check-out has GPS",
+        compute='_compute_syg_has_gps',
+    )
+
+    @api.depends('in_latitude', 'in_longitude', 'out_latitude', 'out_longitude')
+    def _compute_syg_has_gps(self):
+        for attendance in self:
+            attendance.syg_in_has_gps = coordinates_present(
+                attendance.in_latitude, attendance.in_longitude,
+            )
+            attendance.syg_out_has_gps = coordinates_present(
+                attendance.out_latitude, attendance.out_longitude,
+            )
+
+    def action_in_attendance_maps(self):
+        self.ensure_one()
+        if not coordinates_present(self.in_latitude, self.in_longitude):
+            raise UserError(self.env._(
+                "No GPS position was recorded for this check-in."
+            ))
+        return super().action_in_attendance_maps()
+
+    def action_out_attendance_maps(self):
+        self.ensure_one()
+        if not coordinates_present(self.out_latitude, self.out_longitude):
+            raise UserError(self.env._(
+                "No GPS position was recorded for this check-out."
+            ))
+        return super().action_out_attendance_maps()
 
     @api.model_create_multi
     def create(self, vals_list):

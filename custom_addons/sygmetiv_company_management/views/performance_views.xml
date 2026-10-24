@@ -91,7 +91,7 @@
                     </group>
                     <group string="Period activity">
                         <field name="timesheet_hours"/>
-                        <field name="overtime_hours"/>
+                        <field name="overtime_hours" groups="sygmetiv_attendance.group_syg_overtime"/>
                         <field name="task_count"/>
                     </group>
                     <group string="Scores (1-5)">

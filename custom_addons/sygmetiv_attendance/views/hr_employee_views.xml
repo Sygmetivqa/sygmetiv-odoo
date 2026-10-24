@@ -10,4 +10,35 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_employee_form_syg_hide_overtime" model="ir.ui.view">
+        <field name="name">hr.employee.form.syg.hide.overtime</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_attendance.view_employee_form_inherit_hr_attendance"/>
+        <field name="arch" type="xml">
+            <xpath expr="//span[hasclass('text-success')][.//field[@name='hours_last_month_overtime']]" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//span[hasclass('text-danger')][.//field[@name='hours_last_month_overtime']]" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//field[@name='ruleset_id']" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_public_view_form_syg" model="ir.ui.view">
+        <field name="name">hr.employee.public.form.syg.hide.overtime</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr_attendance.hr_employee_public_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//span[hasclass('text-success')][.//field[@name='hours_last_month_overtime']]" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+            <xpath expr="//span[hasclass('text-danger')][.//field[@name='hours_last_month_overtime']]" position="attributes">
+                <attribute name="groups">sygmetiv_attendance.group_syg_overtime</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

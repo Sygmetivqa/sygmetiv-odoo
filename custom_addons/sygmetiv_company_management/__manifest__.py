@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sygmetiv Company Management',
-    'version': '19.0.1.42.0',
+    'version': '19.0.1.44.0',
     'category': 'Human Resources',
     'summary': 'Employee dashboard, projects, timesheets, overtime, payroll and performance',
     'description': """
