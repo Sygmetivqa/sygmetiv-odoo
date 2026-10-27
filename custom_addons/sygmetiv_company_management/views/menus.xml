@@ -49,7 +49,7 @@
         name="People"
         parent="menu_syg_company_root"
         sequence="10"
-        groups="sygmetiv_company_management.group_company_manager"/>
+        groups="sygmetiv_company_management.group_company_user"/>
 
     <menuitem
         id="menu_syg_employees"
@@ -152,21 +152,24 @@
         name="Timesheets"
         parent="menu_syg_time"
         action="action_syg_menu_timesheets"
-        sequence="10"/>
+        sequence="10"
+        groups="sygmetiv_company_management.group_company_user"/>
 
     <menuitem
         id="menu_syg_attendance"
         name="Attendances"
         parent="menu_syg_time"
         action="action_syg_menu_attendance"
-        sequence="20"/>
+        sequence="20"
+        groups="sygmetiv_company_management.group_company_user"/>
 
     <menuitem
         id="menu_syg_timeoff"
         name="Time Off"
         parent="menu_syg_time"
         action="action_syg_menu_timeoff"
-        sequence="30"/>
+        sequence="30"
+        groups="sygmetiv_company_management.group_company_user"/>
 
     <menuitem
         id="menu_syg_overtime"

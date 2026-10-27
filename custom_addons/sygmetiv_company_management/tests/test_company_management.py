@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import Command
+from odoo import Command, fields
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged, TransactionCase
 
@@ -108,3 +108,102 @@ class TestCompanyManagement(TransactionCase):
         self.assertEqual(task.syg_attendee_ids, employee)
         self.assertEqual(task.syg_presentation_time, 1.0)
         self.assertIn('Agenda', task.description or '')
+
+    def test_employee_user_sees_own_hr_documents(self):
+        group = self.env.ref('sygmetiv_company_management.group_company_user')
+        user_a = self.env['res.users'].create({
+            'name': 'HR Own A',
+            'login': 'syg_hr_own_a',
+            'group_ids': [Command.set([group.id])],
+        })
+        user_b = self.env['res.users'].create({
+            'name': 'HR Own B',
+            'login': 'syg_hr_own_b',
+            'group_ids': [Command.set([group.id])],
+        })
+        manager = self.env['hr.employee'].create({'name': 'HR Own Manager'})
+        department = self.env['hr.department'].create({'name': 'HR Own Dept'})
+        job = self.env['hr.job'].create({'name': 'HR Own Job'})
+        employee_a = self.env['hr.employee'].search([('user_id', '=', user_a.id)], limit=1)
+        employee_b = self.env['hr.employee'].search([('user_id', '=', user_b.id)], limit=1)
+        if not employee_a:
+            employee_a = self.env['hr.employee'].create({
+                'name': 'HR Own A',
+                'user_id': user_a.id,
+            })
+        if not employee_b:
+            employee_b = self.env['hr.employee'].create({
+                'name': 'HR Own B',
+                'user_id': user_b.id,
+            })
+        employee_a.parent_id = manager
+        employee_b.write({
+            'parent_id': manager.id,
+            'department_id': department.id,
+            'job_id': job.id,
+        })
+        outsider = self.env['hr.employee'].create({'name': 'HR Outsider'})
+
+        visible = self.env['hr.employee'].with_user(user_b).search([])
+        self.assertIn(employee_b, visible)
+        self.assertIn(manager, visible)
+        self.assertNotIn(employee_a, visible)
+        self.assertNotIn(outsider, visible)
+        profile = employee_b.with_user(user_b).read([
+            'name', 'department_id', 'job_id', 'job_title', 'parent_id',
+        ])[0]
+        self.assertEqual(profile['department_id'][0], department.id)
+        self.assertEqual(profile['job_id'][0], job.id)
+        self.assertEqual(employee_b.with_user(user_b).parent_id.display_name, manager.name)
+
+        leave_type = self.env['hr.leave.type'].create({
+            'name': 'Own Leave',
+            'requires_allocation': False,
+            'request_unit': 'day',
+        })
+        today = fields.Date.today()
+        leave_b = self.env['hr.leave'].create({
+            'name': 'Own day off',
+            'employee_id': employee_b.id,
+            'holiday_status_id': leave_type.id,
+            'request_date_from': today,
+            'request_date_to': today,
+        })
+        leave_a = self.env['hr.leave'].create({
+            'name': 'Other day off',
+            'employee_id': employee_a.id,
+            'holiday_status_id': leave_type.id,
+            'request_date_from': today,
+            'request_date_to': today,
+        })
+        leaves = self.env['hr.leave'].with_user(user_b).search([
+            ('id', 'in', (leave_a | leave_b).ids),
+        ])
+        self.assertEqual(leaves, leave_b)
+        self.assertEqual(
+            leave_b.with_user(user_b).read(['employee_id'])[0]['employee_id'][0],
+            employee_b.id,
+        )
+
+        attendance_b = self.env['hr.attendance'].create({
+            'employee_id': employee_b.id,
+            'check_in': fields.Datetime.now(),
+        })
+        attendance_a = self.env['hr.attendance'].create({
+            'employee_id': employee_a.id,
+            'check_in': fields.Datetime.now(),
+        })
+        attendances = self.env['hr.attendance'].with_user(user_b).search([
+            ('id', 'in', (attendance_a | attendance_b).ids),
+        ])
+        self.assertEqual(attendances, attendance_b)
+        self.assertEqual(
+            attendance_b.with_user(user_b).read(['employee_id', 'check_in'])[0]['employee_id'][0],
+            employee_b.id,
+        )
+
+        dashboard = self.env['syg.workplace.dashboard'].with_user(user_b)
+        self.assertEqual(dashboard.action_menu_timeoff()['res_model'], 'hr.leave')
+        attendance_action = dashboard.action_menu_attendance()
+        self.assertEqual(attendance_action['res_model'], 'hr.attendance')
+        self.assertIn(('employee_id.user_id', '=', user_b.id), attendance_action['domain'])

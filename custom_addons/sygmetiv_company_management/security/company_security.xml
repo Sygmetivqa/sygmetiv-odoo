@@ -81,7 +81,7 @@
     <record id="rule_hr_employee_own" model="ir.rule">
         <field name="name">Sygmetiv Employee: own employee record</field>
         <field name="model_id" ref="hr.model_hr_employee"/>
-        <field name="domain_force">['|', ('user_id', '=', user.id), ('id', '=', user.employee_id.id)]</field>
+        <field name="domain_force">['|', ('user_id', '=', user.id), ('id', 'in', list(filter(None, [user.employee_id.id, user.employee_id.parent_id.id, user.employee_id.coach_id.id])))]</field>
         <field name="groups" eval="[(4, ref('group_company_user'))]"/>
     </record>
     <record id="rule_hr_employee_team" model="ir.rule">
@@ -253,6 +253,18 @@
         <field name="model_id" ref="project.model_project_task"/>
         <field name="domain_force">[(1, '=', 1)]</field>
         <field name="groups" eval="[(4, ref('group_company_manager'))]"/>
+    </record>
+    <record id="rule_syg_version_scope" model="ir.rule">
+        <field name="name">Sygmetiv: employee version scope</field>
+        <field name="model_id" ref="hr.model_hr_version"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">(user.has_group('sygmetiv_company_management.group_company_manager') or not user.has_group('sygmetiv_company_management.group_company_user')) and [(1, '=', 1)] or ['|', ('employee_id.user_id', '=', user.id), ('employee_id', 'in', list(filter(None, [user.employee_id.id, user.employee_id.parent_id.id, user.employee_id.coach_id.id])))]</field>
+    </record>
+    <record id="rule_syg_attendance_overtime_line_scope" model="ir.rule">
+        <field name="name">Sygmetiv: attendance extra hours scope</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance_overtime_line"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">(user.has_group('sygmetiv_company_management.group_company_manager') or not user.has_group('sygmetiv_company_management.group_company_user')) and [(1, '=', 1)] or [('employee_id.user_id', '=', user.id)]</field>
     </record>
     <record id="rule_syg_leave_scope" model="ir.rule">
         <field name="name">Sygmetiv: time off scope</field>

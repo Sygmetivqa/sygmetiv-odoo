@@ -6,6 +6,13 @@ from odoo import fields, models
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
+    # Work fields such as department and job are stored on hr.version and
+    # reached through version_id. That delegate is HR-officer only in standard
+    # Odoo, so an Employee user cannot open their own profile until it is widened.
+    version_id = fields.Many2one(
+        groups="hr.group_hr_user,sygmetiv_company_management.group_company_user",
+    )
+
     syg_allowance_monthly = fields.Monetary(
         string="Monthly Allowance",
         currency_field='currency_id',

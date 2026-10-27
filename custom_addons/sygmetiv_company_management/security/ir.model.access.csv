@@ -15,6 +15,8 @@ access_syg_dashboard_employee,syg.workplace.dashboard.user,model_syg_workplace_d
 access_syg_task_wizard_lead,syg.task.assign.wizard.lead,model_syg_task_assign_wizard,sygmetiv_company_management.group_company_manager,1,1,1,1
 access_syg_payslip_wizard_executive,syg.payslip.generate.wizard.executive,model_syg_payslip_generate_wizard,sygmetiv_company_management.group_company_manager,1,1,1,1
 access_hr_employee_syg_user,hr.employee.syg.employee,hr.model_hr_employee,sygmetiv_company_management.group_company_user,1,0,0,0
+access_hr_version_syg_user,hr.version.syg.employee,hr.model_hr_version,sygmetiv_company_management.group_company_user,1,0,0,0
+access_hr_attendance_overtime_line_syg_user,hr.attendance.overtime.line.syg.employee,hr_attendance.model_hr_attendance_overtime_line,sygmetiv_company_management.group_company_user,1,0,0,0
 access_syg_project_dashboard,syg.project.dashboard.user,model_syg_project_dashboard,project.group_project_user,1,1,1,1
 access_syg_project_document_user,syg.project.document.user,model_syg_project_document,project.group_project_user,1,1,1,0
 access_syg_project_document_manager,syg.project.document.manager,model_syg_project_document,project.group_project_manager,1,1,1,1
