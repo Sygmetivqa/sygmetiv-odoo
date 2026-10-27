@@ -207,3 +207,19 @@ class TestCompanyManagement(TransactionCase):
         attendance_action = dashboard.action_menu_attendance()
         self.assertEqual(attendance_action['res_model'], 'hr.attendance')
         self.assertIn(('employee_id.user_id', '=', user_b.id), attendance_action['domain'])
+
+    def test_contacts_menu_requires_contact_creation(self):
+        self.env['ir.ui.menu']._syg_restrict_optional_menus()
+        menu = self.env.ref('contacts.menu_contacts', raise_if_not_found=False)
+        if not menu:
+            return
+        creation = self.env.ref('base.group_partner_manager')
+        self.assertEqual(menu.group_ids, creation)
+        user = self.env['res.users'].create({
+            'name': 'No Contact Create',
+            'login': 'syg_no_contact_create',
+            'group_ids': [Command.set([self.env.ref('base.group_user').id])],
+        })
+        self.assertFalse(menu.with_user(user)._filter_visible_menus())
+        user.write({'group_ids': [Command.link(creation.id)]})
+        self.assertEqual(menu.with_user(user)._filter_visible_menus(), menu)
