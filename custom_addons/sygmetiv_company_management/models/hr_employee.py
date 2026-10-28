@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import pytz
+
 from odoo import fields, models
 
 
@@ -24,6 +26,17 @@ class HrEmployee(models.Model):
     leave_date_from = fields.Date(
         groups="hr.group_hr_user,sygmetiv_company_management.group_company_user",
     )
+    # The check-in menu reads these on the employee's own record. Standard
+    # Odoo limits them to attendance officers and HR officers.
+    _syg_attendance_groups = (
+        "hr_attendance.group_hr_attendance_officer,hr.group_hr_user,"
+        "sygmetiv_company_management.group_company_user"
+    )
+    hours_today = fields.Float(groups=_syg_attendance_groups)
+    hours_previously_today = fields.Float(groups=_syg_attendance_groups)
+    last_attendance_worked_hours = fields.Float(groups=_syg_attendance_groups)
+    attendance_state = fields.Selection(groups=_syg_attendance_groups)
+    last_check_in = fields.Datetime(groups=_syg_attendance_groups)
 
     def _syg_today_work_location(self):
         """Today's location for fields every employee is allowed to see.
@@ -51,6 +64,40 @@ class HrEmployee(models.Model):
             return super()._compute_work_location_type()
         for employee in self:
             employee.work_location_type = employee._syg_today_work_location().location_type
+
+    def _compute_hours_last_month(self):
+        # hours_last_month is public, but the standard compute reads
+        # attendance_ids, which is limited to attendance and HR officers.
+        now_utc = pytz.utc.localize(fields.Datetime.now())
+        for employee in self:
+            private = employee.sudo()
+            tz = pytz.timezone(private.tz or 'UTC')
+            now_tz = now_utc.astimezone(tz)
+            start_naive = now_tz.replace(
+                day=1, hour=0, minute=0, second=0, microsecond=0,
+            ).astimezone(pytz.utc).replace(tzinfo=None)
+            end_naive = now_tz.astimezone(pytz.utc).replace(tzinfo=None)
+            hours = 0.0
+            overtime_hours = 0.0
+            for attendance in private.attendance_ids:
+                if (
+                    attendance.check_in
+                    and attendance.check_in >= start_naive
+                    and attendance.check_out
+                    and attendance.check_out <= end_naive
+                ):
+                    hours += attendance.worked_hours or 0.0
+                    overtime_hours += attendance.validated_overtime_hours or 0.0
+            employee.hours_last_month = round(hours, 2)
+            employee.hours_last_month_display = "%g" % employee.hours_last_month
+            employee.hours_last_month_overtime = round(overtime_hours, 2)
+
+    def _compute_attendance_state(self):
+        for employee in self:
+            attendance = employee.sudo().last_attendance_id
+            employee.attendance_state = (
+                'checked_in' if attendance and not attendance.check_out else 'checked_out'
+            )
 
     def _compute_birthday_public_display_string(self):
         # birthday and birthday_public_display are officer-only, while the

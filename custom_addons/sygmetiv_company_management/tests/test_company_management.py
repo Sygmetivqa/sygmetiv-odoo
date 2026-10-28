@@ -253,13 +253,23 @@ class TestCompanyManagement(TransactionCase):
             'work_location_name', 'work_location_type',
             'leave_date_to', 'current_leave_id', 'current_leave_state', 'leave_date_from',
             'is_absent', 'birthday_public_display_string',
+            'hours_last_month', 'hours_last_month_overtime',
+            'hours_today', 'hours_previously_today', 'last_attendance_worked_hours',
+            'attendance_state', 'last_check_in',
         ])
         field_names = [name for name in field_names if name in Employee._fields]
+        employee.tz = employee.tz or 'UTC'
         profile = employee.with_user(user).read(field_names)[0]
         self.assertEqual(profile['work_location_name'], 'Main Office')
         self.assertEqual(profile['work_location_type'], 'office')
         self.assertEqual(profile['birthday_public_display_string'], 'hidden')
         self.assertTrue(profile['hr_icon_display'])
+        self.assertEqual(profile['hours_last_month'], 0)
+        self.assertEqual(profile['attendance_state'], 'checked_out')
+        from odoo.addons.hr_attendance.controllers.main import HrAttendance
+        systray = HrAttendance._get_user_attendance_data(employee.with_user(user))
+        self.assertEqual(systray['attendance_state'], 'checked_out')
+        self.assertEqual(systray['hours_today'], 0)
 
     def test_contacts_menu_requires_contact_creation(self):
         self.env['ir.ui.menu']._syg_restrict_optional_menus()
