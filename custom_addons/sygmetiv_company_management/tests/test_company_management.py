@@ -151,6 +151,7 @@ class TestCompanyManagement(TransactionCase):
         self.assertNotIn(outsider, visible)
         profile = employee_b.with_user(user_b).read([
             'name', 'department_id', 'job_id', 'job_title', 'parent_id',
+            'current_leave_id', 'current_leave_state', 'leave_date_from',
         ])[0]
         self.assertEqual(profile['department_id'][0], department.id)
         self.assertEqual(profile['job_id'][0], job.id)

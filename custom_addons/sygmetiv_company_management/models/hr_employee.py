@@ -12,6 +12,18 @@ class HrEmployee(models.Model):
     version_id = fields.Many2one(
         groups="hr.group_hr_user,sygmetiv_company_management.group_company_user",
     )
+    # The employee kanban and presence icon read the current time off.
+    # Those fields are HR-officer only in standard Odoo, so an Employee
+    # user cannot open Employees until they are widened.
+    current_leave_id = fields.Many2one(
+        groups="hr.group_hr_user,sygmetiv_company_management.group_company_user",
+    )
+    current_leave_state = fields.Selection(
+        groups="hr.group_hr_user,sygmetiv_company_management.group_company_user",
+    )
+    leave_date_from = fields.Date(
+        groups="hr.group_hr_user,sygmetiv_company_management.group_company_user",
+    )
 
     syg_allowance_monthly = fields.Monetary(
         string="Monthly Allowance",
