@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sygmetiv Company Management',
-    'version': '19.0.1.49.0',
+    'version': '19.0.1.50.0',
     'category': 'Human Resources',
     'summary': 'Employee dashboard, projects, timesheets, overtime, payroll and performance',
     'description': """
@@ -23,6 +23,7 @@ Unifies day-to-day company operations:
     'license': 'LGPL-3',
     'depends': [
         'hr',
+        'hr_homeworking',
         'hr_org_chart',
         'hr_attendance',
         'hr_holidays',

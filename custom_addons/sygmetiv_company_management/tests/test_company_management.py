@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from lxml import etree
+
 from odoo import Command, fields
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged, TransactionCase
@@ -208,6 +210,56 @@ class TestCompanyManagement(TransactionCase):
         attendance_action = dashboard.action_menu_attendance()
         self.assertEqual(attendance_action['res_model'], 'hr.attendance')
         self.assertIn(('employee_id.user_id', '=', user_b.id), attendance_action['domain'])
+
+    def test_employee_user_opens_employee_views(self):
+        """Employees menu is the standard hr.employee kanban, which reads
+        officer-only fields while drawing presence and the public birthday.
+        """
+        group = self.env.ref('sygmetiv_company_management.group_company_user')
+        user = self.env['res.users'].create({
+            'name': 'Employee Views',
+            'login': 'syg_employee_views',
+            'group_ids': [Command.set([group.id])],
+        })
+        employee = self.env['hr.employee'].search([('user_id', '=', user.id)], limit=1)
+        if not employee:
+            employee = self.env['hr.employee'].create({
+                'name': 'Employee Views',
+                'user_id': user.id,
+            })
+        address = self.env['res.partner'].create({
+            'name': 'Main Office Address',
+            'company_id': self.env.company.id,
+        })
+        location = self.env['hr.work.location'].create({
+            'name': 'Main Office',
+            'location_type': 'office',
+            'address_id': address.id,
+        })
+        employee[employee._get_current_day_location_field()] = location
+
+        Employee = self.env['hr.employee'].with_user(user)
+        field_names = set()
+        views = Employee.get_views([(False, view_type) for view_type in ('kanban', 'list', 'form')])
+        for view in views['views'].values():
+            tree = etree.fromstring(view['arch'])
+            for node in tree.xpath('//field[@name]'):
+                if node.xpath('ancestor::field'):
+                    continue
+                field_names.add(node.get('name'))
+        # Presence widgets request these even when they are not in the arch.
+        field_names.update([
+            'hr_icon_display', 'show_hr_icon_display', 'hr_presence_state',
+            'work_location_name', 'work_location_type',
+            'leave_date_to', 'current_leave_id', 'current_leave_state', 'leave_date_from',
+            'is_absent', 'birthday_public_display_string',
+        ])
+        field_names = [name for name in field_names if name in Employee._fields]
+        profile = employee.with_user(user).read(field_names)[0]
+        self.assertEqual(profile['work_location_name'], 'Main Office')
+        self.assertEqual(profile['work_location_type'], 'office')
+        self.assertEqual(profile['birthday_public_display_string'], 'hidden')
+        self.assertTrue(profile['hr_icon_display'])
 
     def test_contacts_menu_requires_contact_creation(self):
         self.env['ir.ui.menu']._syg_restrict_optional_menus()

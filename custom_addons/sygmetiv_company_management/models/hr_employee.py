@@ -25,6 +25,43 @@ class HrEmployee(models.Model):
         groups="hr.group_hr_user,sygmetiv_company_management.group_company_user",
     )
 
+    def _syg_today_work_location(self):
+        """Today's location for fields every employee is allowed to see.
+
+        Remote Work keeps exceptional_location_id on the HR officer group, but
+        the presence icon and the employee kanban compute work_location_name
+        and work_location_type from it. The presence icon already reads it
+        with sudo; these two computes did not, so opening Employees raised
+        an access error for a normal employee.
+        """
+        self.ensure_one()
+        if 'exceptional_location_id' not in self._fields:
+            return self.env['hr.work.location']
+        dayfield = self._get_current_day_location_field()
+        return self.sudo().exceptional_location_id or self[dayfield]
+
+    def _compute_work_location_name(self):
+        if 'exceptional_location_id' not in self._fields:
+            return super()._compute_work_location_name()
+        for employee in self:
+            employee.work_location_name = employee._syg_today_work_location().name
+
+    def _compute_work_location_type(self):
+        if 'exceptional_location_id' not in self._fields:
+            return super()._compute_work_location_type()
+        for employee in self:
+            employee.work_location_type = employee._syg_today_work_location().location_type
+
+    def _compute_birthday_public_display_string(self):
+        # birthday and birthday_public_display are officer-only, while the
+        # kanban shows birthday_public_display_string to every employee.
+        for employee in self:
+            private = employee.sudo()
+            if private.birthday and private.birthday_public_display:
+                employee.birthday_public_display_string = private.birthday.strftime("%d %B")
+            else:
+                employee.birthday_public_display_string = "hidden"
+
     syg_allowance_monthly = fields.Monetary(
         string="Monthly Allowance",
         currency_field='currency_id',
