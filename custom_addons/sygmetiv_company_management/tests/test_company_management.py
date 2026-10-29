@@ -29,6 +29,33 @@ class TestCompanyManagement(TransactionCase):
         self.assertEqual(slip.state, 'computed')
         self.assertIn('NET', slip.line_ids.mapped('code'))
 
+    def _create_project(self, name):
+        hosting = self.env['syg.hosting.type'].create({'name': '%s hosting' % name})
+        implementation = self.env['syg.implementation.type'].create({'name': '%s implementation' % name})
+        return self.env['project.project'].create({
+            'name': name,
+            'syg_hosting_type_id': hosting.id,
+            'syg_implementation_type_ids': [Command.set(implementation.ids)],
+        })
+
+    def test_project_requires_hosting_and_implementation_type(self):
+        with self.assertRaises(ValidationError):
+            self.env['project.project'].create({'name': 'Missing types'})
+        hosting = self.env['syg.hosting.type'].create({'name': 'On premise'})
+        with self.assertRaises(ValidationError):
+            self.env['project.project'].create({
+                'name': 'Missing implementation',
+                'syg_hosting_type_id': hosting.id,
+            })
+        implementation = self.env['syg.implementation.type'].create({'name': 'Greenfield'})
+        project = self.env['project.project'].create({
+            'name': 'Typed project',
+            'syg_hosting_type_id': hosting.id,
+            'syg_implementation_type_ids': [Command.set(implementation.ids)],
+        })
+        self.assertEqual(project.syg_hosting_type_id, hosting)
+        self.assertEqual(project.syg_implementation_type_ids, implementation)
+
     def test_credential_visibility_and_project_link(self):
         group = self.env.ref('sygmetiv_company_management.group_company_user')
         user_a = self.env['res.users'].create({
@@ -41,7 +68,7 @@ class TestCompanyManagement(TransactionCase):
             'login': 'syg_cred_user_b',
             'group_ids': [Command.set([group.id])],
         })
-        project = self.env['project.project'].create({'name': 'Credential Project'})
+        project = self._create_project('Credential Project')
         credential = self.env['syg.credential'].create({
             'name': 'App login',
             'username': 'app',
@@ -66,7 +93,7 @@ class TestCompanyManagement(TransactionCase):
         self.assertEqual(project.syg_credential_count, 1)
 
     def test_meeting_task_requires_attendees_and_role_type(self):
-        project = self.env['project.project'].create({'name': 'Meeting Project'})
+        project = self._create_project('Meeting Project')
         meeting = self.env['syg.task.type'].create({'name': 'Client Demo', 'is_meeting': True})
         regular = self.env['syg.task.type'].create({'name': 'Development Work', 'is_meeting': False})
         attendee = self.env['syg.role.type'].create({'name': 'Listener', 'requires_presentation': False})

@@ -12,6 +12,23 @@ class ProjectProject(models.Model):
         help="Mark this project as an Annual Maintenance Contract (AMC) project.",
         default=False,
     )
+    syg_hosting_type_id = fields.Many2one(
+        'syg.hosting.type',
+        string="Hosting Type",
+        required=True,
+        ondelete='restrict',
+        tracking=True,
+        index=True,
+    )
+    syg_implementation_type_ids = fields.Many2many(
+        'syg.implementation.type',
+        'syg_project_implementation_type_rel',
+        'project_id',
+        'implementation_type_id',
+        string="Implementation Types",
+        required=True,
+        tracking=True,
+    )
     syg_is_live = fields.Boolean(string="Live", copy=False, tracking=True)
     syg_go_live_date = fields.Datetime(readonly=True, copy=False)
     syg_live_check_ids = fields.One2many(

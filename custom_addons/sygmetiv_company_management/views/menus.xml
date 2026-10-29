@@ -335,6 +335,20 @@
         sequence="21"/>
 
     <menuitem
+        id="menu_syg_implementation_type"
+        name="Implementation Types"
+        parent="menu_syg_config"
+        action="action_syg_implementation_type"
+        sequence="22"/>
+
+    <menuitem
+        id="menu_syg_hosting_type"
+        name="Hosting Types"
+        parent="menu_syg_config"
+        action="action_syg_hosting_type"
+        sequence="23"/>
+
+    <menuitem
         id="menu_syg_attendance_geofence"
         name="Attendance Locations"
         parent="menu_syg_config"
@@ -372,6 +386,22 @@
         parent="project.menu_project_config"
         action="action_syg_role_type"
         sequence="26"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_project_implementation_type"
+        name="Implementation Types"
+        parent="project.menu_project_config"
+        action="action_syg_implementation_type"
+        sequence="27"
+        groups="sygmetiv_company_management.group_company_manager"/>
+
+    <menuitem
+        id="menu_project_hosting_type"
+        name="Hosting Types"
+        parent="project.menu_project_config"
+        action="action_syg_hosting_type"
+        sequence="28"
         groups="sygmetiv_company_management.group_company_manager"/>
 
     <menuitem

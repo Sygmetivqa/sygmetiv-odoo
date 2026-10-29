@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_syg_implementation_type_list" model="ir.ui.view">
+        <field name="name">syg.implementation.type.list</field>
+        <field name="model">syg.implementation.type</field>
+        <field name="arch" type="xml">
+            <list string="Implementation Types" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_syg_implementation_type_form" model="ir.ui.view">
+        <field name="name">syg.implementation.type.form</field>
+        <field name="model">syg.implementation.type</field>
+        <field name="arch" type="xml">
+            <form string="Implementation Type">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_syg_implementation_type" model="ir.actions.act_window">
+        <field name="name">Implementation Types</field>
+        <field name="res_model">syg.implementation.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create an implementation type</p>
+            <p>Implementation types are chosen on projects. Create them here; they cannot be added from the project dropdown.</p>
+        </field>
+    </record>
+</odoo>

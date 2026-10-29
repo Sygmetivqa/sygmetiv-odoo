@@ -11,6 +11,10 @@
                 <attribute name="invisible">is_template</attribute>
                 <attribute name="options">{'no_create': True}</attribute>
             </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="syg_hosting_type_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="syg_implementation_type_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
+            </xpath>
             <xpath expr="//field[@name='user_id']" position="attributes">
                 <attribute name="options">{'no_create': True}</attribute>
             </xpath>
@@ -116,6 +120,8 @@
         <field name="inherit_id" ref="project.view_project"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
+                <field name="syg_hosting_type_id" optional="show" options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="syg_implementation_type_ids" optional="show" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
                 <field name="syg_is_amc" optional="show" widget="boolean_toggle"/>
                 <field name="allocated_hours" optional="show" widget="float_time" string="Estimated"/>
                 <field name="effective_hours" optional="show" widget="float_time" string="Spent"/>
@@ -129,9 +135,43 @@
         <field name="model">project.project</field>
         <field name="inherit_id" ref="project.view_project_project_filter"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="syg_hosting_type_id"/>
+                <field name="syg_implementation_type_ids"/>
+            </xpath>
             <xpath expr="//filter[@name='my_projects']" position="after">
                 <filter string="AMC Projects" name="syg_amc_projects" domain="[('syg_is_amc', '=', True)]"/>
                 <filter string="Over hours" name="syg_over_hours" domain="[('is_project_overtime', '=', True)]"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter string="Hosting Type" name="groupby_syg_hosting_type" context="{'group_by': 'syg_hosting_type_id'}"/>
+                <filter string="Implementation Type" name="groupby_syg_implementation_type" context="{'group_by': 'syg_implementation_type_ids'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_project_view_form_simplified_syg_types" model="ir.ui.view">
+        <field name="name">project.project.form.simplified.syg.types</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="after">
+                <group>
+                    <field name="syg_hosting_type_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="syg_implementation_type_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="quick_create_project_form_syg_types" model="ir.ui.view">
+        <field name="name">project.form.quick_create.syg.types</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.quick_create_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="syg_hosting_type_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="syg_implementation_type_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True}"/>
             </xpath>
         </field>
     </record>

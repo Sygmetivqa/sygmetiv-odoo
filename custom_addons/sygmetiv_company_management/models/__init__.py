@@ -10,6 +10,8 @@ from . import performance
 from . import hr_employee
 from . import task_type
 from . import role_type
+from . import implementation_type
+from . import hosting_type
 from . import meeting_details
 from . import project_project
 from . import project_task

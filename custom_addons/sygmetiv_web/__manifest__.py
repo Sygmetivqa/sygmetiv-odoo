@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sygmetiv Web',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'category': 'Hidden',
     'summary': 'Enterprise-style app home menu for Odoo Community',
     'description': """
@@ -12,6 +12,9 @@ similar to Odoo Enterprise: large icons, search, and a 9-dot home button.
     'website': 'https://sygmetiv.qa',
     'license': 'LGPL-3',
     'depends': ['web'],
+    'data': [
+        'views/report_templates.xml',
+    ],
     'installable': True,
     'auto_install': ['web'],
     'pre_init_hook': 'pre_init_hook',

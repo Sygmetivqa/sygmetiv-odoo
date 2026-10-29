@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="external_layout_boxed_full_width_header" inherit_id="web.external_layout_boxed">
+        <xpath expr="//div[contains(@t-attf-class, 'header')]" position="replace">
+            <div t-attf-class="header o_company_#{company.id}_layout">
+                <img t-if="company.logo"
+                     t-att-src="image_data_uri(company.logo)"
+                     alt="Logo"
+                     style="display: block; width: 100%; max-width: none; height: auto;"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>
