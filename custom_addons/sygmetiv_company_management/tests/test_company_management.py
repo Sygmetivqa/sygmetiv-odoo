@@ -241,6 +241,8 @@ class TestCompanyManagement(TransactionCase):
         Employee = self.env['hr.employee'].with_user(user)
         field_names = set()
         views = Employee.get_views([(False, view_type) for view_type in ('kanban', 'list', 'form')])
+        form_arch = etree.fromstring(views['views']['form']['arch'])
+        self.assertFalse(form_arch.xpath('//chatter'))
         for view in views['views'].values():
             tree = etree.fromstring(view['arch'])
             for node in tree.xpath('//field[@name]'):
@@ -270,6 +272,8 @@ class TestCompanyManagement(TransactionCase):
         systray = HrAttendance._get_user_attendance_data(employee.with_user(user))
         self.assertEqual(systray['attendance_state'], 'checked_out')
         self.assertEqual(systray['hours_today'], 0)
+        action = self.env.ref('sygmetiv_company_management.action_syg_employees')
+        self.assertEqual(action.view_mode, 'kanban,list,form')
 
     def test_contacts_menu_requires_contact_creation(self):
         self.env['ir.ui.menu']._syg_restrict_optional_menus()

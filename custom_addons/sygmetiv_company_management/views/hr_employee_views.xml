@@ -16,6 +16,11 @@
                     <field name="syg_review_count" widget="statinfo" string="Reviews"/>
                 </button>
             </xpath>
+            <!-- Chatter loads activities and messages. Those fields are HR-officer
+                 only, so a normal employee opening this form gets an access error. -->
+            <xpath expr="//chatter" position="attributes">
+                <attribute name="groups">hr.group_hr_user</attribute>
+            </xpath>
             <xpath expr="//page[@name='hr_settings']" position="inside">
                 <group string="Community Payroll" groups="hr.group_hr_manager">
                     <field name="syg_allowance_monthly"/>

@@ -951,7 +951,11 @@ class SygWorkplaceDashboard(models.TransientModel):
         return self.env.ref('hr.hr_department_kanban_action').sudo().read()[0]
 
     def action_employees(self):
-        return self.env.ref('hr.open_view_employee_list_my').sudo().read()[0]
+        if self.env.user.has_group('hr.group_hr_user'):
+            xmlid = 'hr.open_view_employee_list_my'
+        else:
+            xmlid = 'sygmetiv_company_management.action_syg_employees'
+        return self.env.ref(xmlid).sudo().read()[0]
 
     def action_team(self):
         employee = self.employee_id

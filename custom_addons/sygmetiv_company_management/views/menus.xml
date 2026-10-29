@@ -51,11 +51,21 @@
         sequence="10"
         groups="sygmetiv_company_management.group_company_user"/>
 
+    <!-- The standard Employees action also opens activity, graph, and pivot.
+         Those views read officer-only fields (activities, contract dates). -->
+    <record id="action_syg_employees" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('company_id', 'in', allowed_company_ids)]</field>
+        <field name="context">{'chat_icon': True, 'searchpanel_default_company_id': allowed_company_ids[0]}</field>
+        <field name="search_view_id" ref="hr.view_employee_filter"/>
+    </record>
     <menuitem
         id="menu_syg_employees"
         name="Employees"
         parent="menu_syg_people"
-        action="hr.open_view_employee_list_my"
+        action="action_syg_employees"
         sequence="10"
         groups="sygmetiv_company_management.group_company_user"/>
 
